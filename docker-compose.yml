@@ -1,0 +1,14 @@
+volumes:
+  pg_data:
+
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: artist_management_system
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
