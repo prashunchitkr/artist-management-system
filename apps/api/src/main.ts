@@ -24,6 +24,7 @@ async function bootstrap() {
   const swaggerEndpoint = 'swagger';
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
   addSwagger(app, swaggerEndpoint);

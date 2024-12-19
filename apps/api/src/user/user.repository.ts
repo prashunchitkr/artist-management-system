@@ -31,10 +31,12 @@ export class UserRepository implements IRepository<User> {
     return users;
   }
 
-  async create(entity: User): Promise<User> {
+  async create(
+    entity: Omit<User, 'id' | 'created_at' | 'updated_at'>,
+  ): Promise<User> {
     try {
       const user = await this.db.query<User>(
-        'INSERT INTO users (first_name, last_name, email, password, phone, dob, gender, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+        'INSERT INTO users (first_name, last_name, email, password, phone, dob, gender, address, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
         [
           entity.first_name,
           entity.last_name,
@@ -44,6 +46,7 @@ export class UserRepository implements IRepository<User> {
           entity.dob,
           entity.gender,
           entity.address,
+          entity.role,
         ],
       );
 
@@ -85,5 +88,17 @@ export class UserRepository implements IRepository<User> {
       this.logger.error('Error deleting user', error);
       throw new UserNotFoundException(id);
     }
+  }
+
+  async findUserFromEmailOrPhone(
+    email: string,
+    phone: string,
+  ): Promise<User | null> {
+    const user = await this.db.query<User>(
+      'SELECT * FROM users WHERE email = $1 OR phone = $2',
+      [email, phone],
+    );
+
+    return user.length > 0 ? user[0] : null;
   }
 }
