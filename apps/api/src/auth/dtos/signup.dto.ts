@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsString,
+  IsStrongPassword,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -26,7 +27,13 @@ export class SignupDto {
   email: string;
 
   @IsString()
-  @MinLength(8)
+  @IsStrongPassword({
+    minUppercase: 1,
+    minLowercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+    minLength: 8,
+  })
   password: string;
 
   @IsString()
