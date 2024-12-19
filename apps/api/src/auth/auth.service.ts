@@ -41,7 +41,9 @@ export class AuthService {
     );
 
     if (userExists) {
-      throw new ConflictException('User already exists');
+      throw new ConflictException(
+        'User with given email or phone already exists',
+      );
     }
 
     const password = await this.passwordService.hashPassword(user.password);
