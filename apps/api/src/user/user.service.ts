@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import {
+  IFindAllPaginated,
+  IPagination,
+} from '@/infra/interfaces/repository.interface';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 
@@ -14,6 +19,10 @@ export class UserService {
 
   async findOneUser(id: number): Promise<User | null> {
     return this.userRepository.findOne(id);
+  }
+
+  async findAll(pagination: IPagination): Promise<IFindAllPaginated<User>> {
+    return this.userRepository.findAll(pagination);
   }
 
   async findUserFromEmailOrPhone(

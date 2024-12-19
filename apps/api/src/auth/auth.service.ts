@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { Role, User } from '@/user/entities/user.entity';
@@ -70,7 +70,7 @@ export class AuthService {
     );
 
     if (!isValidPassword) {
-      throw new BadRequestException('Invalid email and password combination');
+      throw new UnauthorizedException('Invalid email and password combination');
     }
 
     return this.getJwtToken(user);

@@ -2,40 +2,52 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { DatabaseService } from '@/infra/database.service';
 import {
+  IFindAllPaginated,
   IPagination,
   IRepository,
 } from '@/infra/interfaces/repository.interface';
 import { User } from './entities/user.entity';
 import { CannotInsertUserException } from './exceptions/cannot-insert-user.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
   private readonly logger = new Logger(UserRepository.name);
   constructor(private readonly db: DatabaseService) {}
 
-  async findOne(id: number): Promise<User | null> {
-    const user = await this.db.query<User>(
-      'SELECT * FROM users WHERE id = $1',
-      [id],
+  async count(): Promise<number> {
+    const result = await this.db.query<{ count: string }>(
+      'SELECT COUNT(*) FROM users',
     );
-    return user.length > 0 ? user[0] : null;
+
+    return parseInt(result[0].count, 10);
   }
 
-  async findAll(pagination: IPagination): Promise<User[]> {
-    const users = await this.db.query<User>(
+  async findOne(id: number): Promise<User | null> {
+    const user = await this.db.query('SELECT * FROM users WHERE id = $1', [id]);
+    return user.length > 0 ? plainToClass(User, user[0]) : null;
+  }
+
+  // TODO: Implement cursor based pagination for better performance
+  async findAll(pagination: IPagination): Promise<IFindAllPaginated<User>> {
+    const users = await this.db.query(
       'SELECT * FROM users LIMIT $1 OFFSET $2',
       [pagination.take, pagination.skip],
     );
 
-    return users;
+    return {
+      data: users.map((user) => plainToClass(User, user)),
+      total: await this.count(),
+      count: users.length,
+    };
   }
 
   async create(
     entity: Omit<User, 'id' | 'created_at' | 'updated_at'>,
   ): Promise<User> {
     try {
-      const user = await this.db.query<User>(
+      const user = await this.db.query(
         'INSERT INTO users (first_name, last_name, email, password, phone, dob, gender, address, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
         [
           entity.first_name,
@@ -50,7 +62,7 @@ export class UserRepository implements IRepository<User> {
         ],
       );
 
-      return user[0];
+      return plainToClass(User, user[0]);
     } catch (error) {
       this.logger.error('Error inserting into user', error);
       throw new CannotInsertUserException();
@@ -59,7 +71,7 @@ export class UserRepository implements IRepository<User> {
 
   async update(id: number, entity: User): Promise<User> {
     try {
-      const user = await this.db.query<User>(
+      const user = await this.db.query(
         'UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, phone = $5, dob = $6, gender = $7, address = $8, updated_at = NOW() WHERE id = $9 RETURNING *',
         [
           entity.first_name,
@@ -74,7 +86,7 @@ export class UserRepository implements IRepository<User> {
         ],
       );
 
-      return user[0];
+      return plainToClass(User, user[0]);
     } catch (error) {
       this.logger.error('Error updating user', error);
       throw new UserNotFoundException(id);
@@ -94,11 +106,11 @@ export class UserRepository implements IRepository<User> {
     email: string,
     phone: string,
   ): Promise<User | null> {
-    const user = await this.db.query<User>(
+    const user = await this.db.query(
       'SELECT * FROM users WHERE email = $1 OR phone = $2',
       [email, phone],
     );
 
-    return user.length > 0 ? user[0] : null;
+    return user.length > 0 ? plainToClass(User, user[0]) : null;
   }
 }
