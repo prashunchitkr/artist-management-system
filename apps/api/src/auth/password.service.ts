@@ -13,12 +13,12 @@ export class PasswordService {
     this.saltRounds = bcrypt.saltRounds;
   }
 
-  async hashPassword(password: string): Promise<string> {
+  async hash(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(this.saltRounds);
     return bcrypt.hash(password, salt);
   }
 
-  async comparePassword(password: string, hash: string): Promise<boolean> {
+  async compare(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 }

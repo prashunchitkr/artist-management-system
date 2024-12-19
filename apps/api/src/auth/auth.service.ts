@@ -46,7 +46,7 @@ export class AuthService {
       );
     }
 
-    const password = await this.passwordService.hashPassword(user.password);
+    const password = await this.passwordService.hash(user.password);
 
     const newUser = await this.userService.createUser({
       ...user,
@@ -64,7 +64,7 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    const isValidPassword = await this.passwordService.comparePassword(
+    const isValidPassword = await this.passwordService.compare(
       password,
       user.password,
     );
