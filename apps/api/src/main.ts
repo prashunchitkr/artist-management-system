@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CONFIG_KEYS } from './core/config/app.config';
 import { IHostConfig } from './core/config/host.config';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 function addSwagger(app: INestApplication, endpoint: string) {
@@ -24,10 +24,12 @@ async function bootstrap() {
   const swaggerEndpoint = 'swagger';
   const app = await NestFactory.create(AppModule);
 
-  const appConfig = app.get(ConfigService);
-  const { host, port } = appConfig.get<IHostConfig>(CONFIG_KEYS.host);
+  app.useGlobalPipes(new ValidationPipe());
 
   addSwagger(app, swaggerEndpoint);
+
+  const appConfig = app.get(ConfigService);
+  const { host, port } = appConfig.get<IHostConfig>(CONFIG_KEYS.host);
 
   await app.listen(port, host, () => {
     logger.log(`Server is running on http://${host}:${port}`);
