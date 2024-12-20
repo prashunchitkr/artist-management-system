@@ -16,11 +16,17 @@ import {
 import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UserService } from './user.service';
+import { User } from './entities/user.entity';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  private readonly maskPassword = (user: User) => {
+    user.password = undefined; // TODO: Find a fix to not expose password through class-transformer
+    return user;
+  };
 
   @Get()
   async findAll(
@@ -28,18 +34,10 @@ export class UserController {
   ): Promise<FindAllUserResponseDto> {
     const users = await this.userService.findAll(query);
 
-    const prev = query.skip - query.take;
-    const remaining = users.total - (query.skip + query.take);
-
     return {
-      data: users.data.map((user) => ({ ...user, password: undefined })), // TODO: Find a fix to not expose password through class-transformer
+      data: users.data.map(this.maskPassword),
       total: users.total,
       count: users.count,
-      prev: prev >= 0 ? `/users?skip=${prev}&take=${query.take}` : undefined,
-      next:
-        remaining > 0
-          ? `/users?skip=${query.skip + query.take}&take=${query.take}`
-          : undefined,
     };
   }
 
@@ -47,9 +45,7 @@ export class UserController {
   async createUser(
     @Body() data: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
-    const newUser = await this.userService.createUser(data);
-    newUser.password = undefined; // TODO: Find a fix to not expose password through class-transformer
-    return newUser;
+    return this.userService.createUser(data).then(this.maskPassword);
   }
 
   @Put()

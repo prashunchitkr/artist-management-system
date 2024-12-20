@@ -9,6 +9,4 @@ export class FindAllUserResponseDto implements PaginatedDto<User> {
 
   total: number;
   count: number;
-  prev?: string;
-  next?: string;
 }
