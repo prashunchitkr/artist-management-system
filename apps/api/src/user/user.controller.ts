@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
   Param,
   ParseIntPipe,
   Patch,
@@ -21,6 +22,7 @@ import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { CannotDeleteUserException } from './exceptions/cannot-delete-user.exception';
 
 @ApiTags('Users')
 @Controller('users')
@@ -63,5 +65,13 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser() {}
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    try {
+      return this.userService.delete(id);
+    } catch (error) {
+      if (error instanceof CannotDeleteUserException) {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
 }

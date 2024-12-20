@@ -99,4 +99,14 @@ export class UserService {
   ): Promise<User | null> {
     return this.userRepository.findUserFromEmailOrPhone(email, phone);
   }
+
+  async delete(id: number): Promise<void> {
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return await this.userRepository.delete(id);
+  }
 }

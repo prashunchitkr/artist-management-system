@@ -6,10 +6,9 @@ import {
   IPagination,
   IRepository,
 } from '@/infra/interfaces/repository.interface';
+import { plainToClass } from 'class-transformer';
 import { User } from './entities/user.entity';
 import { CannotInsertUserException } from './exceptions/cannot-insert-user.exception';
-import { UserNotFoundException } from './exceptions/user-not-found.exception';
-import { plainToClass } from 'class-transformer';
 import { CannotUpdateUserException } from './exceptions/cannot-update-user.excepton';
 
 @Injectable()
@@ -100,7 +99,7 @@ export class UserRepository implements IRepository<User> {
       await this.db.query('DELETE FROM users WHERE id = $1', [id]);
     } catch (error) {
       this.logger.error('Error deleting user', error);
-      throw new UserNotFoundException(id);
+      throw new CannotUpdateUserException(id, error);
     }
   }
 
