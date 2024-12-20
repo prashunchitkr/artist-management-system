@@ -14,7 +14,9 @@ export class ArtistRepository implements IRepository<Artist> {
 
   constructor(private readonly db: DatabaseService) {}
 
-  async create(entity: Artist): Promise<Artist> {
+  async create(
+    entity: Omit<Artist, 'id' | 'created_at' | 'updated_at'>,
+  ): Promise<Artist> {
     const query = `
         INSERT INTO
           artists(name, gender, user_id, dob, address, first_release_year, no_of_albums_released)
