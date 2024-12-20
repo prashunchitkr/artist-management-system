@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  InternalServerErrorException,
   Param,
   ParseIntPipe,
   Patch,
@@ -13,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { Roles } from '@/auth/decorators/role.decorator';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@/auth/guards/role.guard';
 import {
@@ -24,9 +24,7 @@ import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { Role, User } from './entities/user.entity';
-import { CannotDeleteUserException } from './exceptions/cannot-delete-user.exception';
 import { UserService } from './user.service';
-import { Roles } from '@/auth/decorators/role.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -76,12 +74,6 @@ export class UserController {
   @Delete(':id')
   @Roles(Role.SuperAdmin)
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return this.userService.delete(id);
-    } catch (error) {
-      if (error instanceof CannotDeleteUserException) {
-        throw new InternalServerErrorException();
-      }
-    }
+    return this.userService.delete(id);
   }
 }

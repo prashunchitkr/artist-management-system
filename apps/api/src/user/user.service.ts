@@ -22,10 +22,7 @@ export class UserService {
   async createUser(
     user: Omit<User, 'id' | 'created_at' | 'updated_at'>,
   ): Promise<User> {
-    const userExists = await this.findUserFromEmailOrPhone(
-      user.email,
-      user.phone,
-    );
+    const userExists = await this.findUserFromEmail(user.email);
 
     if (userExists) {
       throw new ConflictException(
@@ -59,11 +56,8 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if (data.email !== user.email || data.phone !== user.phone) {
-      const isValid = await this.validateNewPhoneOrEmail(
-        data.phone,
-        data.email,
-      );
+    if (data.email !== user.email) {
+      const isValid = await this.validateNewEmail(data.phone, data.email);
       if (!isValid) {
         throw new ConflictException(
           'User with given email or phone already exists',
@@ -81,11 +75,11 @@ export class UserService {
     });
   }
 
-  private async validateNewPhoneOrEmail(
+  private async validateNewEmail(
     phone: string,
     email: string,
   ): Promise<boolean> {
-    const user = await this.findUserFromEmailOrPhone(email, phone);
+    const user = await this.findUserFromEmail(email);
 
     if (user) {
       return false;
@@ -93,11 +87,8 @@ export class UserService {
     return true;
   }
 
-  async findUserFromEmailOrPhone(
-    email: string,
-    phone: string,
-  ): Promise<User | null> {
-    return this.userRepository.findUserFromEmailOrPhone(email, phone);
+  async findUserFromEmail(email: string): Promise<User | null> {
+    return this.userRepository.findUserFromEmail(email);
   }
 
   async delete(id: number): Promise<void> {

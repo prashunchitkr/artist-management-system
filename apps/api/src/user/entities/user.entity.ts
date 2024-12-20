@@ -18,10 +18,9 @@ export class User {
   last_name: string;
   email: string;
   gender: Gender;
-  phone: string;
-  dob: Date;
-  address: string;
-
+  phone: string | null;
+  dob: Date | null;
+  address: string | null;
   role: Role;
 
   @Exclude({
