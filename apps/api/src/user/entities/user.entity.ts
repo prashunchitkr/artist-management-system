@@ -1,16 +1,5 @@
+import { Gender, Role } from '@/core/enums/db.enums';
 import { Exclude } from 'class-transformer';
-
-export enum Gender {
-  Male = 'm',
-  Female = 'f',
-  Other = 'o',
-}
-
-export enum Role {
-  SuperAdmin = 'super_admin',
-  ArtistManager = 'artist_manager',
-  Artist = 'artist',
-}
 
 export class User {
   id: number;
@@ -31,3 +20,4 @@ export class User {
   created_at: Date;
   updated_at: Date;
 }
+export { Role };

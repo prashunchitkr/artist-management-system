@@ -23,8 +23,9 @@ import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { Role, User } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { Role } from '@/core/enums/db.enums';
 
 @ApiTags('Users')
 @Controller('users')
