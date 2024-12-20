@@ -17,19 +17,18 @@ export class User {
   first_name: string;
   last_name: string;
   email: string;
-
-  @Exclude()
-  password: string;
-
+  gender: Gender;
   phone: string;
   dob: Date;
-  gender: Gender;
   address: string;
+
   role: Role;
 
-  @Exclude()
-  created_at: Date;
+  @Exclude({
+    toPlainOnly: true,
+  })
+  password: string;
 
-  @Exclude()
+  created_at: Date;
   updated_at: Date;
 }
