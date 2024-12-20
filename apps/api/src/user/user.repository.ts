@@ -103,14 +103,10 @@ export class UserRepository implements IRepository<User> {
     }
   }
 
-  async findUserFromEmailOrPhone(
-    email: string,
-    phone: string,
-  ): Promise<User | null> {
-    const user = await this.db.query(
-      'SELECT * FROM users WHERE email = $1 OR phone = $2',
-      [email, phone],
-    );
+  async findUserFromEmail(email: string): Promise<User | null> {
+    const user = await this.db.query('SELECT * FROM users WHERE email = $1', [
+      email,
+    ]);
 
     return user.length > 0 ? plainToClass(User, user[0]) : null;
   }

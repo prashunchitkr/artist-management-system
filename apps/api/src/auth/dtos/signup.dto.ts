@@ -1,5 +1,7 @@
+import { IsNullable } from '@/core/decorators/is-nullable.decorator';
 import { Gender } from '@/user/entities/user.entity';
 import {
+  IsDate,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -36,20 +38,21 @@ export class SignupDto {
   })
   password: string;
 
+  @IsNullable()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(20)
-  phone: string;
+  phone: string | null;
 
-  @IsNotEmpty()
-  dob: Date;
+  @IsNullable()
+  @IsDate()
+  dob: Date | null;
 
   @IsNotEmpty()
   @IsEnum(Gender)
   gender: Gender;
 
+  @IsNullable()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(255)
-  address: string;
+  address: string | null;
 }

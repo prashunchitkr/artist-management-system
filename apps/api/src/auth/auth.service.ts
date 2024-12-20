@@ -8,9 +8,9 @@ import {
 import { Role, User } from '@/user/entities/user.entity';
 import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { PasswordService } from '../core/utils/password.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { SignupDto } from './dtos/signup.dto';
-import { PasswordService } from '../core/utils/password.service';
 
 @Injectable()
 export class AuthService {
@@ -35,10 +35,7 @@ export class AuthService {
   }
 
   async signup(user: SignupDto): Promise<AuthResponseDto> {
-    const userExists = await this.userService.findUserFromEmailOrPhone(
-      user.email,
-      user.phone,
-    );
+    const userExists = await this.userService.findUserFromEmail(user.email);
 
     if (userExists) {
       throw new ConflictException(
@@ -46,19 +43,16 @@ export class AuthService {
       );
     }
 
-    const password = await this.passwordService.hash(user.password);
-
     const newUser = await this.userService.createUser({
       ...user,
-      role: Role.SuperAdmin, // FIXME: Change the role to something inferior
-      password,
+      role: Role.SuperAdmin, // FIXME: Change the role to something inferior?
     });
 
     return this.getJwtToken(newUser);
   }
 
   async login(email: string, password: string): Promise<AuthResponseDto> {
-    const user = await this.userService.findUserFromEmailOrPhone(email, '');
+    const user = await this.userService.findUserFromEmail(email);
 
     if (!user) {
       throw new NotFoundException('User not found');
