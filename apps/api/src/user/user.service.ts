@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 import {
   IFindAllPaginated,
@@ -6,15 +6,35 @@ import {
 } from '@/infra/interfaces/repository.interface';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
+import { PasswordService } from '@/core/utils/password.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly passwordService: PasswordService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async createUser(
     user: Omit<User, 'id' | 'created_at' | 'updated_at'>,
   ): Promise<User> {
-    return this.userRepository.create(user);
+    const userExists = await this.findUserFromEmailOrPhone(
+      user.email,
+      user.phone,
+    );
+
+    if (userExists) {
+      throw new ConflictException(
+        'User with given email or phone already exists',
+      );
+    }
+
+    const hashedPassword = await this.passwordService.hash(user.password);
+
+    return this.userRepository.create({
+      ...user,
+      password: hashedPassword,
+    });
   }
 
   async findOneUser(id: number): Promise<User | null> {

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
+import { CONFIG_KEYS } from '@/core/config/app.config';
+import { IAuthConfig } from '@/core/config/auth.config';
+import { UtilsModule } from '@/core/utils/utils.module';
 import { UserModule } from '@/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { IAuthConfig } from '@/core/config/auth.config';
-import { CONFIG_KEYS } from '@/core/config/app.config';
-import { PasswordService } from './password.service';
 
 @Module({
   imports: [
@@ -31,10 +31,11 @@ import { PasswordService } from './password.service';
         };
       },
     }),
+    UtilsModule,
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, PasswordService],
+  providers: [AuthService],
   exports: [],
 })
 export class AuthModule {}

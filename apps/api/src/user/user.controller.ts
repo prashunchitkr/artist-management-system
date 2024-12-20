@@ -1,6 +1,18 @@
-import { Controller, Delete, Get, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import {
+  CreateUserRequestDto,
+  CreateUserResponseDto,
+} from './dtos/create-user.dto';
 import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UserService } from './user.service';
@@ -32,7 +44,13 @@ export class UserController {
   }
 
   @Post()
-  async createUser() {}
+  async createUser(
+    @Body() data: CreateUserRequestDto,
+  ): Promise<CreateUserResponseDto> {
+    const newUser = await this.userService.createUser(data);
+    newUser.password = undefined; // TODO: Find a fix to not expose password through class-transformer
+    return newUser;
+  }
 
   @Put()
   async updateUser() {}

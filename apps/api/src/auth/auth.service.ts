@@ -10,7 +10,7 @@ import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { SignupDto } from './dtos/signup.dto';
-import { PasswordService } from './password.service';
+import { PasswordService } from '../core/utils/password.service';
 
 @Injectable()
 export class AuthService {
