@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { CannotInsertUserException } from './exceptions/cannot-insert-user.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { plainToClass } from 'class-transformer';
+import { CannotUpdateUserException } from './exceptions/cannot-update-user.excepton';
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
@@ -72,7 +73,7 @@ export class UserRepository implements IRepository<User> {
   async update(id: number, entity: User): Promise<User> {
     try {
       const user = await this.db.query(
-        'UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, phone = $5, dob = $6, gender = $7, address = $8, updated_at = NOW() WHERE id = $9 RETURNING *',
+        'UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, phone = $5, dob = $6, gender = $7, address = $8, role=$9, updated_at = NOW() WHERE id = $10 RETURNING *',
         [
           entity.first_name,
           entity.last_name,
@@ -82,6 +83,7 @@ export class UserRepository implements IRepository<User> {
           entity.dob,
           entity.gender,
           entity.address,
+          entity.role,
           entity.id,
         ],
       );
@@ -89,7 +91,7 @@ export class UserRepository implements IRepository<User> {
       return plainToClass(User, user[0]);
     } catch (error) {
       this.logger.error('Error updating user', error);
-      throw new UserNotFoundException(id);
+      throw new CannotUpdateUserException(id, entity);
     }
   }
 

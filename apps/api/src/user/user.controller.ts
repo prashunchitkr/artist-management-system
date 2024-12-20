@@ -3,8 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
+  ParseIntPipe,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -15,9 +17,10 @@ import {
 } from './dtos/create-user.dto';
 import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
-import { UserService } from './user.service';
-import { User } from './entities/user.entity';
+import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @Controller('users')
@@ -51,9 +54,14 @@ export class UserController {
     return this.userService.createUser(data).then(this.stripPrivateFields);
   }
 
-  @Put()
-  async updateUser() {}
+  @Patch(':id')
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    return this.userService.update(id, data).then(this.stripPrivateFields);
+  }
 
-  @Delete()
+  @Delete(':id')
   async deleteUser() {}
 }

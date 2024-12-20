@@ -1,12 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
+import { PasswordService } from '@/core/utils/password.service';
 import {
   IFindAllPaginated,
   IPagination,
 } from '@/infra/interfaces/repository.interface';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
-import { PasswordService } from '@/core/utils/password.service';
 
 @Injectable()
 export class UserService {
@@ -43,6 +47,50 @@ export class UserService {
 
   async findAll(pagination: IPagination): Promise<IFindAllPaginated<User>> {
     return this.userRepository.findAll(pagination);
+  }
+
+  async update(
+    id: number,
+    data: Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>,
+  ): Promise<User> {
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (data.email !== user.email || data.phone !== user.phone) {
+      const isValid = await this.validateNewPhoneOrEmail(
+        data.phone,
+        data.email,
+      );
+      if (!isValid) {
+        throw new ConflictException(
+          'User with given email or phone already exists',
+        );
+      }
+    }
+
+    if (data.password) {
+      data.password = await this.passwordService.hash(data.password);
+    }
+
+    return this.userRepository.update(id, {
+      ...user,
+      ...data,
+    });
+  }
+
+  private async validateNewPhoneOrEmail(
+    phone: string,
+    email: string,
+  ): Promise<boolean> {
+    const user = await this.findUserFromEmailOrPhone(email, phone);
+
+    if (user) {
+      return false;
+    }
+    return true;
   }
 
   async findUserFromEmailOrPhone(
