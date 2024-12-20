@@ -1,11 +1,11 @@
 import { Type } from 'class-transformer';
 
 import { PaginatedDto } from '@/infra/dtos/paginated.dto';
-import { User } from '../entities/user.entity';
+import { UserResponseDto } from './user-response.dto';
 
-export class FindAllUserResponseDto implements PaginatedDto<User> {
-  @Type(() => User)
-  data: User[];
+export class FindAllUserResponseDto implements PaginatedDto<UserResponseDto> {
+  @Type(() => UserResponseDto)
+  data: UserResponseDto[];
 
   total: number;
   count: number;

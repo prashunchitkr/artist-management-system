@@ -17,15 +17,18 @@ import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
+import { UserResponseDto } from './dtos/user-response.dto';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  private readonly maskPassword = (user: User) => {
-    user.password = undefined; // TODO: Find a fix to not expose password through class-transformer
-    return user;
+  private readonly stripPrivateFields = (user: User): UserResponseDto => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
   };
 
   @Get()
@@ -35,7 +38,7 @@ export class UserController {
     const users = await this.userService.findAll(query);
 
     return {
-      data: users.data.map(this.maskPassword),
+      data: users.data.map(this.stripPrivateFields),
       total: users.total,
       count: users.count,
     };
@@ -45,7 +48,7 @@ export class UserController {
   async createUser(
     @Body() data: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
-    return this.userService.createUser(data).then(this.maskPassword);
+    return this.userService.createUser(data).then(this.stripPrivateFields);
   }
 
   @Put()
