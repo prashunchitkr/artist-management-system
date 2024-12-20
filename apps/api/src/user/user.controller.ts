@@ -9,9 +9,12 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '@/auth/guards/role.guard';
 import {
   CreateUserRequestDto,
   CreateUserResponseDto,
@@ -20,12 +23,15 @@ import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { User } from './entities/user.entity';
-import { UserService } from './user.service';
+import { Role, User } from './entities/user.entity';
 import { CannotDeleteUserException } from './exceptions/cannot-delete-user.exception';
+import { UserService } from './user.service';
+import { Roles } from '@/auth/decorators/role.decorator';
 
 @ApiTags('Users')
 @Controller('users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -37,6 +43,7 @@ export class UserController {
   };
 
   @Get()
+  @Roles(Role.SuperAdmin)
   async findAll(
     @Query() query: FindAllUserQueryDto,
   ): Promise<FindAllUserResponseDto> {
@@ -50,6 +57,7 @@ export class UserController {
   }
 
   @Post()
+  @Roles(Role.SuperAdmin)
   async createUser(
     @Body() data: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
@@ -57,6 +65,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Roles(Role.SuperAdmin)
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateUserRequestDto,
@@ -65,6 +74,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(Role.SuperAdmin)
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     try {
       return this.userService.delete(id);
