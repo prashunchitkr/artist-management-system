@@ -21,6 +21,10 @@ import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { CreateArtistRequestDto } from './dtos/create-artist.dto';
 import { FindArtistResponseDto } from './dtos/find-artist.dto';
+import {
+  UpdateArtistRequestDto,
+  UpdateArtistResponseDto,
+} from './dtos/update-artist.dto';
 
 @ApiTags('Artist')
 @Controller('artists')
@@ -55,7 +59,12 @@ export class ArtistController {
 
   @Patch(':id')
   @Roles(Role.SuperAdmin, Role.ArtistManager)
-  async updateArtist(@Param('id', ParseIntPipe) artistId: number) {}
+  async updateArtist(
+    @Param('id', ParseIntPipe) artistId: number,
+    @Body() data: UpdateArtistRequestDto,
+  ): Promise<UpdateArtistResponseDto> {
+    return this.artistService.updateArtist(artistId, data);
+  }
 
   @Delete(':id')
   @Roles(Role.SuperAdmin, Role.ArtistManager)

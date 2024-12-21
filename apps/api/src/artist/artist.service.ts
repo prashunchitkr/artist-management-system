@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { ArtistRepository } from './artist.repository';
 import { Artist } from './entities/artist.entity';
@@ -37,8 +41,16 @@ export class ArtistService {
     return this.artistRepository.findOne(id);
   }
 
-  async updateArtist(id: number) {
-    return this.artistRepository.update(id, {} as any);
+  async updateArtist(id: number, artist: Partial<Artist>) {
+    const existingArtist = await this.artistRepository.findOne(id);
+
+    if (!existingArtist) {
+      throw new NotFoundException('Artist not found');
+    }
+
+    const updatedArtist = { ...existingArtist, ...artist };
+
+    return this.artistRepository.update(id, updatedArtist);
   }
 
   async deleteArtist(id: number) {
