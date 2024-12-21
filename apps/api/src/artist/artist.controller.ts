@@ -68,9 +68,7 @@ export class ArtistController {
 
   @Delete(':id')
   @Roles(Role.SuperAdmin, Role.ArtistManager)
-  async deleteArtist(@Param('id', ParseIntPipe) artistId: number) {}
-
-  @Get(':id/songs')
-  @Roles(Role.SuperAdmin, Role.ArtistManager)
-  async getSongs(@Param('id', ParseIntPipe) artistId: number) {}
+  async deleteArtist(@Param('id', ParseIntPipe) artistId: number) {
+    return this.artistService.deleteArtist(artistId);
+  }
 }
