@@ -55,6 +55,22 @@ export class ArtistRepository implements IRepository<Artist> {
     return result.length ? plainToClass(Artist, result[0]) : null;
   }
 
+  async findOneByUserId(user_id: number): Promise<Artist | null> {
+    const query = `
+        SELECT
+          *
+        FROM
+          artists
+        WHERE
+          user_id = $1
+      `;
+    const values = [user_id];
+
+    const result = await this.db.query(query, values);
+
+    return result.length ? plainToClass(Artist, result[0]) : null;
+  }
+
   async findAll(pagination: IPagination): Promise<IFindAllPaginated<Artist>> {
     const query = `
         SELECT
