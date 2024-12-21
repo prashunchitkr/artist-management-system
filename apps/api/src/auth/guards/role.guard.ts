@@ -1,7 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+
+import { Role } from '@/core/enums/db.enums';
 import { IJwtPayload } from '../strategies/jwt.strategy';
-import { Role } from '@/user/entities/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -10,16 +11,16 @@ export class RolesGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<Role[]>('roles', context.getHandler());
 
-    if (!roles) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest<{
       user: IJwtPayload['profile'];
     }>();
 
     const { role } = request.user; // populated by JwtStrategy
 
-    return roles.includes(role);
+    if (!roles && role === Role.SuperAdmin) {
+      return true;
+    }
+
+    return roles.includes(role) || role === Role.SuperAdmin; // SuperAdmin can do anything
   }
 }

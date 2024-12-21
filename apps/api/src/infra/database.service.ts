@@ -37,6 +37,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   async query<T>(query: string, params?: any[]): Promise<T[]> {
     const client = await this.pool.connect();
     try {
+      this.logger.debug('Executing Query:', query, params);
       const result = await this.pool.query<T>(query, params);
       return result.rows;
     } catch (error) {

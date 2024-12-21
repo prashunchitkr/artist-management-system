@@ -1,11 +1,3 @@
-import { IsNumber, Min } from 'class-validator';
+import { FindManyQueryDto } from '@/core/dtos/find-many-query.dto';
 
-export class FindAllUserQueryDto {
-  @IsNumber()
-  @Min(1)
-  take: number = 10;
-
-  @IsNumber()
-  @Min(0)
-  skip: number = 0;
-}
+export class FindAllUserQueryDto extends FindManyQueryDto {}

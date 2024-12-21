@@ -1,5 +1,5 @@
 import { IsNullable } from '@/core/decorators/is-nullable.decorator';
-import { Gender } from '@/user/entities/user.entity';
+import { Gender } from '@/core/enums/db.enums';
 import {
   IsDate,
   IsEmail,

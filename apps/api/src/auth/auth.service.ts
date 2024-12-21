@@ -5,7 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { Role, User } from '@/user/entities/user.entity';
+import { Role } from '@/core/enums/db.enums';
+import { User } from '@/user/entities/user.entity';
 import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PasswordService } from '../core/utils/password.service';

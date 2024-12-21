@@ -5,6 +5,7 @@ import { appConfig } from './core/config/app.config';
 import { InfraModule } from './infra/infra.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ArtistModule } from './artist/artist.module';
 
 @Module({
   imports: [
@@ -15,7 +16,9 @@ import { AuthModule } from './auth/auth.module';
     InfraModule.forRoot(),
 
     AuthModule,
+
     UserModule,
+    ArtistModule,
   ],
 })
 export class AppModule {}
