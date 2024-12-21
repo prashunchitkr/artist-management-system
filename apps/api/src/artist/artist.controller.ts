@@ -47,7 +47,11 @@ export class ArtistController {
 
   @Get(':id')
   @Roles(Role.SuperAdmin, Role.ArtistManager)
-  async findArtistById(@Param('id', ParseIntPipe) artistId: number) {}
+  async findArtistById(
+    @Param('id', ParseIntPipe) artistId: number,
+  ): Promise<ArtistResponseDto> {
+    return this.artistService.getArtist(artistId);
+  }
 
   @Patch(':id')
   @Roles(Role.SuperAdmin, Role.ArtistManager)
