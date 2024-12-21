@@ -9,5 +9,6 @@ import { ArtistService } from './artist.service';
   imports: [UserModule],
   controllers: [ArtistController],
   providers: [ArtistRepository, ArtistService],
+  exports: [ArtistService],
 })
 export class ArtistModule {}

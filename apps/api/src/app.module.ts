@@ -6,6 +6,7 @@ import { InfraModule } from './infra/infra.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ArtistModule } from './artist/artist.module';
+import { MusicModule } from './music/music.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ArtistModule } from './artist/artist.module';
 
     UserModule,
     ArtistModule,
+    MusicModule,
   ],
 })
 export class AppModule {}
