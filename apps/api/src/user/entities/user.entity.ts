@@ -20,4 +20,3 @@ export class User {
   created_at: Date;
   updated_at: Date;
 }
-export { Role };

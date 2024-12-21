@@ -13,6 +13,7 @@ import { IDatabaseConfig } from 'src/core/config/database.config';
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(DatabaseService.name);
   private readonly pool: Pool;
+  private timeoutId: NodeJS.Timeout;
 
   constructor(configService: ConfigService) {
     const dbConfig = configService.get<IDatabaseConfig>(CONFIG_KEYS.database);
@@ -29,9 +30,13 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    this.logger.verbose('Database connection established');
-    const { rows } = await this.pool.query<{ now: Date }>('SELECT NOW()');
-    this.logger.verbose('Database time:', rows[0].now);
+    try {
+      const { rows } = await this.pool.query<{ now: Date }>('SELECT NOW()');
+      this.logger.verbose('Database time:', rows[0].now);
+    } catch (err) {
+      this.logger.error('Database connection error:', err);
+      process.exit(1);
+    }
   }
 
   async query<T>(query: string, params?: any[]): Promise<T[]> {
@@ -51,5 +56,6 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   async onModuleDestroy() {
     this.logger.verbose('Database connection closed');
     await this.pool.end();
+    clearInterval(this.timeoutId);
   }
 }
