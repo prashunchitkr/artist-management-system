@@ -123,8 +123,8 @@ export class ArtistRepository implements IRepository<Artist> {
           artists
       `;
 
-    const result = await this.db.query<{ count: number }>(query);
+    const result = await this.db.query<{ count: string }>(query);
 
-    return result[0].count;
+    return parseInt(result[0].count, 10);
   }
 }

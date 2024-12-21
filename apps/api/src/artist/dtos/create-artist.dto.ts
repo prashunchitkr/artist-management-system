@@ -1,8 +1,6 @@
 import { IsNullable } from '@/core/decorators/is-nullable.decorator';
 import { Gender } from '@/core/enums/db.enums';
-import { OmitType } from '@nestjs/swagger';
 import { IsDate, IsEnum, IsInt, IsString, MaxLength } from 'class-validator';
-import { Artist } from '../entities/artist.entity';
 
 export class CreateArtistRequestDto {
   @IsString()
@@ -31,9 +29,3 @@ export class CreateArtistRequestDto {
   @IsInt()
   no_of_albums_released: number | null;
 }
-
-export class CreateArtistResponseDto extends OmitType(Artist, [
-  'user_id',
-  'created_at',
-  'updated_at',
-]) {}

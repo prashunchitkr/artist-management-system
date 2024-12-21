@@ -3,6 +3,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ArtistRepository } from './artist.repository';
 import { Artist } from './entities/artist.entity';
 import { UserService } from '@/user/user.service';
+import {
+  IFindAllPaginated,
+  IPagination,
+} from '@/infra/interfaces/repository.interface';
 
 @Injectable()
 export class ArtistService {
@@ -23,8 +27,10 @@ export class ArtistService {
     return this.artistRepository.create(artist);
   }
 
-  async getArtists() {
-    return this.artistRepository.findAll({} as any);
+  async getArtists(
+    pagination: IPagination,
+  ): Promise<IFindAllPaginated<Artist>> {
+    return this.artistRepository.findAll(pagination);
   }
 
   async getArtist(id: number) {

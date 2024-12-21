@@ -11,16 +11,16 @@ export class RolesGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<Role[]>('roles', context.getHandler());
 
-    if (!roles) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest<{
       user: IJwtPayload['profile'];
     }>();
 
     const { role } = request.user; // populated by JwtStrategy
 
-    return roles.includes(role);
+    if (!roles && role === Role.SuperAdmin) {
+      return true;
+    }
+
+    return roles.includes(role) || role === Role.SuperAdmin; // SuperAdmin can do anything
   }
 }
