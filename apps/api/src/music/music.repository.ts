@@ -97,7 +97,7 @@ export class MusicRepository implements IRepository<Music> {
       UPDATE music
        SET artist_id = $1, title = $2, genre = $3, album_name = $4, updated_at = NOW()
       WHERE
-        id = $4
+        id = $5
       RETURNING *
     `;
 
