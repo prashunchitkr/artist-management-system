@@ -26,7 +26,7 @@ import {
   UpdateArtistResponseDto,
 } from './dtos/update-artist.dto';
 
-@ApiTags('Artist')
+@ApiTags('Artists')
 @Controller('artists')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
