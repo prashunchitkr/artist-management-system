@@ -1,17 +1,16 @@
+import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+
 import { DatabaseService } from '@/infra/database.service';
 import {
   IFindAllPaginated,
   IPagination,
   IRepository,
 } from '@/infra/interfaces/repository.interface';
-import { Injectable, Logger } from '@nestjs/common';
 import { Artist } from './entities/artist.entity';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ArtistRepository implements IRepository<Artist> {
-  private readonly logger = new Logger(ArtistRepository.name);
-
   constructor(private readonly db: DatabaseService) {}
 
   async create(

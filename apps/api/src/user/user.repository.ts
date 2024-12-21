@@ -19,11 +19,7 @@ export class UserRepository implements IRepository<User> {
   async count(): Promise<number> {
     const query = 'SELECT COUNT(*) FROM users';
 
-    this.logger.debug('Executing query', query);
-
-    const result = await this.db.query<{ count: string }>(
-      'SELECT COUNT(*) FROM users',
-    );
+    const result = await this.db.query<{ count: string }>(query);
 
     return parseInt(result[0].count, 10);
   }
@@ -38,12 +34,7 @@ export class UserRepository implements IRepository<User> {
     const query = 'SELECT * FROM users LIMIT $1 OFFSET $2';
     const params = [pagination.take, pagination.skip];
 
-    this.logger.debug('Executing query', query, params);
-
-    const users = await this.db.query(
-      'SELECT * FROM users LIMIT $1 OFFSET $2',
-      [pagination.take, pagination.skip],
-    );
+    const users = await this.db.query(query, params);
 
     return {
       data: users.map((user) => plainToClass(User, user)),
@@ -76,8 +67,6 @@ export class UserRepository implements IRepository<User> {
         entity.role,
       ];
 
-      this.logger.debug('Executing query', query, params);
-
       const user = await this.db.query(query, params);
 
       return plainToClass(User, user[0]);
@@ -109,8 +98,6 @@ export class UserRepository implements IRepository<User> {
         entity.id,
       ];
 
-      this.logger.debug('Executing query', query, params);
-
       const user = await this.db.query(query, params);
 
       return plainToClass(User, user[0]);
@@ -125,8 +112,6 @@ export class UserRepository implements IRepository<User> {
       const query = 'DELETE FROM users WHERE id = $1';
       const params = [id];
 
-      this.logger.debug('Executing query', query, params);
-
       await this.db.query(query, params);
     } catch (error) {
       this.logger.error('Error deleting user', error);
@@ -137,8 +122,6 @@ export class UserRepository implements IRepository<User> {
   async findUserFromEmail(email: string): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE email = $1';
     const params = [email];
-
-    this.logger.debug('Executing query', query, params);
 
     const user = await this.db.query(query, params);
 
