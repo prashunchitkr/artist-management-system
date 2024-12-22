@@ -4,8 +4,9 @@
   "description": "Shared interfaces and types for AMS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "module": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "clean": "rm -rf dist",
     "lint": "eslint ."
   },
