@@ -23,5 +23,6 @@
       "@core/*": ["src/core/*"],
       "@infra/*": ["src/infra/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts"]
 }
