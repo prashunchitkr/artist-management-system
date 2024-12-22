@@ -16,7 +16,6 @@ import { ArtistExistsGuard } from '@/artist/guards/artist-exists.guard';
 import { Roles } from '@/auth/decorators/role.decorator';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@/auth/guards/role.guard';
-import { Role } from '@/core/enums/db.enums';
 import {
   CreateMusicRequestDto,
   CreateMusicResponseDto,
@@ -30,6 +29,7 @@ import {
   UpdateMusicResponseDto,
 } from './dtos/update-music.dto';
 import { MusicService } from './song.service';
+import { Role } from '@ams/core';
 
 @ApiTags('Music')
 @Controller('artists/:artistId/music')

@@ -8,7 +8,7 @@ import { Request } from 'express';
 
 import { ArtistService } from '@/artist/artist.service';
 import { IJwtPayload } from '@/auth/strategies/jwt.strategy';
-import { Role } from '@/core/enums/db.enums';
+import { Role } from '@ams/core';
 
 @Injectable()
 export class ArtistExistsGuard implements CanActivate {

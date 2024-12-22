@@ -1,4 +1,4 @@
-import { Gender, Role } from "../enums";
+import { Gender, Role } from "../../enums";
 
 export interface IUser {
   id: number;

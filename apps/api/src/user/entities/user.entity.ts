@@ -1,4 +1,4 @@
-import { Gender, Role } from '@/core/enums/db.enums';
+import { Gender, Role } from '@ams/core';
 import { Exclude } from 'class-transformer';
 
 export class User {

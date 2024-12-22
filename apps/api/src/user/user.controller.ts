@@ -25,7 +25,7 @@ import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
-import { Role } from '@/core/enums/db.enums';
+import { Role } from '@ams/core';
 
 @ApiTags('Users')
 @Controller('users')

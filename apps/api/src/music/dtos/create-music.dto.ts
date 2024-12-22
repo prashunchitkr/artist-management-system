@@ -1,8 +1,8 @@
 import { IsEnum, IsInt, IsString } from 'class-validator';
 
 import { IsNullable } from '@/core/decorators/is-nullable.decorator';
-import { Genre } from '@/core/enums/db.enums';
 import { MusicDto } from './music.dto';
+import { Genre } from '@ams/core';
 
 export class CreateMusicRequestDto {
   @IsInt()

@@ -1,4 +1,4 @@
-import { Gender } from '@/core/enums/db.enums';
+import { Gender } from '@ams/core';
 import { Exclude } from 'class-transformer';
 
 export class Artist {

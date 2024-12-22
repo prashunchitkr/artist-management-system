@@ -15,7 +15,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@/auth/decorators/role.decorator';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@/auth/guards/role.guard';
-import { Role } from '@/core/enums/db.enums';
 import { FindAllUserQueryDto } from '@/user/dtos/find-all-user.dto';
 import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
@@ -25,6 +24,7 @@ import {
   UpdateArtistRequestDto,
   UpdateArtistResponseDto,
 } from './dtos/update-artist.dto';
+import { Role } from '@ams/core';
 
 @ApiTags('Artists')
 @Controller('artists')
