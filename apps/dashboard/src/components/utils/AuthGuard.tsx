@@ -14,8 +14,6 @@ export const AuthGuard = ({ children }: IAuthGuardProps) => {
   useEffect(() => {
     if (!user) {
       navigate("/login");
-    } else {
-      navigate("/");
     }
   }, [user, navigate]);
 

@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-
-import { ILoginRequest, ILoginResponse } from "@ams/core";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { API_URL, LOCAL_STORAGE_KEYS } from "../../core/utils/consts";
-import { useNavigate } from "react-router-dom";
 
-const login = async (payload: ILoginRequest): Promise<ILoginResponse> => {
-  const endpoint = `${API_URL}/auth/login`;
+import { IAuthResponse, ISignupRequest } from "@ams/core";
+import { useNavigate } from "react-router-dom";
+import { API_URL, LOCAL_STORAGE_KEYS } from "../../../core/utils/consts";
+
+const signup = async (payload: ISignupRequest): Promise<IAuthResponse> => {
+  const endpoint = `${API_URL}/auth/signup`;
+
   const response = await fetch(endpoint, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -16,19 +17,19 @@ const login = async (payload: ILoginRequest): Promise<ILoginResponse> => {
   });
 
   if (!response.ok) {
-    throw new Error("An error occurred while trying to login");
+    throw new Error("An error occurred while trying to signup");
   }
 
   return response.json();
 };
 
-export const useLogin = () => {
+export const useSignup = () => {
   const navigate = useNavigate();
   const [, setToken] = useLocalStorage(LOCAL_STORAGE_KEYS.Token, "");
 
   return useMutation({
     mutationKey: ["user"],
-    mutationFn: login,
+    mutationFn: signup,
     onSuccess: (data) => {
       setToken(data.token);
       navigate("/");

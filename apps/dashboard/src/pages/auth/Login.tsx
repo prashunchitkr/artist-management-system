@@ -1,9 +1,9 @@
 import { ILoginRequest } from "@ams/core";
 import { useForm } from "react-hook-form";
-import { useLogin } from "../../hooks/queries/useLogin";
 import { Link } from "react-router";
 import { Button } from "../../components/ui/Button";
 import { TextInput } from "../../components/ui/Input";
+import { useLogin } from "../../hooks/api/auth/useLogin";
 
 export const Login = () => {
   const { mutate } = useLogin();

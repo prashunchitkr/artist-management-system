@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { Button } from "../../components/ui/Button";
 import { InputGroup, SelectInput, TextInput } from "../../components/ui/Input";
-import { useSignup } from "../../hooks/queries/useSignUp";
+import { useSignup } from "../../hooks/api/auth/useSignUp";
 
 type SignupForm = ISignupRequest & {
   confirm_password: string;
