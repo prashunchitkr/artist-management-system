@@ -17,7 +17,7 @@ interface IAuthProviderProps {
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [token] = useLocalStorage(LOCAL_STORAGE_KEYS.Token, "");
   const decodedToken: AuthContextType | null = token
-    ? JSON.parse(atob(token.split(".")[1]))
+    ? JSON.parse(atob(token.split(".")[1])).profile
     : null;
 
   return (
