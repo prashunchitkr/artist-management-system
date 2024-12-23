@@ -3,6 +3,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 
 import { IAuthResponse, ISignupRequest } from "@ams/core";
 import { API_URL, LOCAL_STORAGE_KEYS } from "../../core/utils/consts";
+import { useNavigate } from "react-router-dom";
 
 const signup = async (payload: ISignupRequest): Promise<IAuthResponse> => {
   const endpoint = `${API_URL}/auth/signup`;
@@ -23,6 +24,7 @@ const signup = async (payload: ISignupRequest): Promise<IAuthResponse> => {
 };
 
 export const useSignup = () => {
+  const navigate = useNavigate();
   const [, setToken] = useLocalStorage(LOCAL_STORAGE_KEYS.Token, "");
 
   return useMutation({
@@ -30,6 +32,7 @@ export const useSignup = () => {
     mutationFn: signup,
     onSuccess: (data) => {
       setToken(data.token);
+      navigate("/");
     },
   });
 };

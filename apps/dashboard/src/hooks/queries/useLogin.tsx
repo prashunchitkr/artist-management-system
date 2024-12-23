@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ILoginRequest, ILoginResponse } from "@ams/core";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { API_URL, LOCAL_STORAGE_KEYS } from "../../core/utils/consts";
+import { useNavigate } from "react-router-dom";
 
 const login = async (payload: ILoginRequest): Promise<ILoginResponse> => {
   const endpoint = `${API_URL}/auth/login`;
@@ -22,6 +23,7 @@ const login = async (payload: ILoginRequest): Promise<ILoginResponse> => {
 };
 
 export const useLogin = () => {
+  const navigate = useNavigate();
   const [, setToken] = useLocalStorage(LOCAL_STORAGE_KEYS.Token, "");
 
   return useMutation({
@@ -29,6 +31,7 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: (data) => {
       setToken(data.token);
+      navigate("/");
     },
   });
 };

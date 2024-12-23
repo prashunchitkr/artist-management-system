@@ -27,6 +27,7 @@ export const Signup = () => {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirm_password, ...rest } = data;
+
     mutate(rest);
   };
 
