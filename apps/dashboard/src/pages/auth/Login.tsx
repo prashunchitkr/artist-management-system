@@ -1,9 +1,9 @@
 import { ILoginRequest } from "@ams/core";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import { Button } from "../../components/ui/Button";
 import { TextInput } from "../../components/ui/Input";
 import { useLogin } from "../../hooks/api/auth/useLogin";
+import { Button } from "@mantine/core";
 
 export const Login = () => {
   const { mutate } = useLogin();
