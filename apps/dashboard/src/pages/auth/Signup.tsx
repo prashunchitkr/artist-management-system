@@ -1,9 +1,8 @@
 import { Gender, ISignupRequest } from "@ams/core";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import { Button } from "../../components/ui/Button";
-import { InputGroup, SelectInput, TextInput } from "../../components/ui/Input";
 import { useSignup } from "../../hooks/api/auth/useSignUp";
+import { Button, Input, TextInput } from "@mantine/core";
 
 type SignupForm = ISignupRequest & {
   confirm_password: string;
@@ -35,92 +34,76 @@ export const Signup = () => {
     <div>
       <div className="text-3xl font-bold">Signup</div>
       <form onSubmit={signupForm.handleSubmit(onSubmit)}>
-        <InputGroup>
-          <TextInput
-            placeholder="First Name"
-            required
-            {...signupForm.register("first_name")}
-          />
-        </InputGroup>
+        <TextInput
+          label="First Name"
+          placeholder="First Name"
+          required
+          {...signupForm.register("first_name")}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Last Name"
-            required
-            {...signupForm.register("last_name")}
-          />
-        </InputGroup>
+        <TextInput
+          label="Last Name"
+          placeholder="Last Name"
+          required
+          {...signupForm.register("last_name")}
+        />
 
-        <InputGroup>
-          <TextInput
-            required
-            placeholder="Email"
-            {...signupForm.register("email")}
-          />
-        </InputGroup>
+        <TextInput
+          label="Email"
+          type="email"
+          placeholder="Email"
+          {...signupForm.register("email")}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Password"
-            type="password"
-            required
-            {...signupForm.register("password", { minLength: 8 })}
-          />
-        </InputGroup>
+        <TextInput
+          label="Password"
+          placeholder="Password"
+          type="password"
+          required
+          {...signupForm.register("password", { minLength: 8 })}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Confirm Password"
-            type="password"
-            required
-            {...signupForm.register("confirm_password", { minLength: 8 })}
-          />
-          {signupForm.formState.errors.confirm_password && (
-            <span className="text-red-400">
-              {signupForm.formState.errors.confirm_password.message}
-            </span>
-          )}
-        </InputGroup>
+        <TextInput
+          label="Confirm Password"
+          placeholder="Confirm Password"
+          type="password"
+          required
+          error={signupForm.formState.errors.confirm_password?.message}
+          {...signupForm.register("confirm_password", { minLength: 8 })}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Phone"
-            {...signupForm.register("phone", {
-              required: false,
-            })}
-          />
-        </InputGroup>
+        <TextInput
+          label="Phone"
+          placeholder="Phone"
+          {...signupForm.register("phone", {
+            required: false,
+          })}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Address"
-            {...signupForm.register("address", {
-              required: false,
-            })}
-          />
-        </InputGroup>
+        <TextInput
+          label="Address"
+          placeholder="Address"
+          {...signupForm.register("address", {
+            required: false,
+          })}
+        />
 
-        <InputGroup>
-          <TextInput
-            placeholder="Date of Birth"
-            type="date"
-            {...signupForm.register("dob", {
-              required: false,
-              valueAsDate: true,
-            })}
-          />
-        </InputGroup>
+        <TextInput
+          placeholder="Date of Birth"
+          type="date"
+          {...signupForm.register("dob", {
+            required: false,
+            valueAsDate: true,
+          })}
+        />
 
-        <InputGroup>
-          <SelectInput
-            values={[
-              [Gender.Male, "Male"],
-              [Gender.Female, "Female"],
-              [Gender.Other, "Other"],
-            ]}
-            {...signupForm.register("gender")}
-          />
-        </InputGroup>
+        <Input.Wrapper label="Gender">
+          <Input component="select" pointer {...signupForm.register("gender")}>
+            <option value={Gender.Male}>Male</option>
+            <option value={Gender.Female}>Female</option>
+            <option value={Gender.Other}>Other</option>
+          </Input>
+        </Input.Wrapper>
 
         <Button type="submit">Sign Up</Button>
       </form>

@@ -1,85 +1,75 @@
 import { IUserResponse } from "@ams/core";
+import { ActionIcon, Group } from "@mantine/core";
+import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useMemo, useState } from "react";
-import DataTable, { TableColumn } from "react-data-table-component";
 import { useGetAllUsers } from "../../hooks/api/users/useGetAllUsers";
-import { Button } from "../ui/Button";
 
 interface IRowActionsProps {
-  id: number;
+  user: IUserResponse;
 }
 
-const RowActions = ({ id }: IRowActionsProps) => {
+const RowActions = (_props: IRowActionsProps) => {
   return (
-    <div>
-      <Button variant="primary">Edit</Button>
-      <Button variant="secondary">Delete</Button>
-    </div>
+    <Group gap={4} wrap="nowrap">
+      <ActionIcon size={"sm"} variant="subtle" color="green">
+        <IconEye size={16} />
+      </ActionIcon>
+      <ActionIcon size={"sm"} variant="subtle" color="blue">
+        <IconEdit size={16} />
+      </ActionIcon>
+      <ActionIcon size={"sm"} variant="subtle" color="red">
+        <IconTrash size={16} />
+      </ActionIcon>
+    </Group>
   );
 };
 
-const columns: TableColumn<IUserResponse>[] = [
+const columns: DataTableColumn<IUserResponse>[] = [
   {
-    name: "ID",
-    selector: (row) => row.id,
+    accessor: "id",
+    title: "#",
+    textAlign: "right",
   },
   {
-    name: "First Name",
-    selector: (row) => row.first_name,
+    title: "First Name",
+    accessor: "first_name",
   },
   {
-    name: "Last Name",
-    selector: (row) => row.last_name,
+    title: "Last Name",
+    accessor: "last_name",
   },
   {
-    name: "Email",
-    wrap: true,
-    selector: (row) => row.email,
+    title: "Gender",
+    accessor: "gender",
   },
   {
-    name: "Gender",
-    width: "6%",
-    selector: (row) => row.gender,
+    title: "Email",
+    accessor: "email",
   },
   {
-    name: "Role",
-    selector: (row) => row.role,
+    title: "Role",
+    accessor: "role",
   },
   {
-    name: "DOB",
-    wrap: true,
-    selector: (row) => row.dob?.toISOString() ?? "N/A",
+    title: "Created At",
+    accessor: "created_at",
+    render: (value) => new Date(value.created_at).toLocaleString(),
   },
   {
-    name: "Phone",
-    selector: (row) => row.phone ?? "N/A",
-  },
-  {
-    name: "Address",
-    wrap: true,
-    selector: (row) => row.address ?? "N/A",
-  },
-  {
-    name: "Actions",
-    cell: (row) => <RowActions id={row.id} />,
+    title: "Actions",
+    accessor: "actions",
+    render: (value) => <RowActions user={value} />,
   },
 ];
 
 export const UserTable = () => {
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(3);
+  const [perPage, setPerPage] = useState(10);
 
   const skip = useMemo(() => (page - 1) * perPage, [page, perPage]);
 
   const users = useGetAllUsers(skip, perPage);
-
-  const handlePageChange = (page: number) => {
-    setPage(() => page);
-  };
-
-  const handlePerPageChange = (newPerPage: number) => {
-    console.debug("Changing per page to", newPerPage);
-    setPerPage(() => newPerPage);
-  };
 
   if (users.isError) {
     return <div>Error occurred</div>;
@@ -88,16 +78,17 @@ export const UserTable = () => {
   return (
     users.data && (
       <DataTable
-        title="Users"
-        data={users.data.data}
+        withTableBorder
+        fetching={users.isLoading}
+        records={users.data.data}
         columns={columns}
-        progressPending={users.isLoading}
-        pagination
-        paginationServer
-        paginationRowsPerPageOptions={[10]}
-        paginationTotalRows={users.data.total}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handlePerPageChange}
+        idAccessor={"id"}
+        totalRecords={users.data.total}
+        recordsPerPage={perPage}
+        page={page}
+        onPageChange={setPage}
+        recordsPerPageOptions={[10, 20, 50, 100]}
+        onRecordsPerPageChange={setPerPage}
       />
     )
   );

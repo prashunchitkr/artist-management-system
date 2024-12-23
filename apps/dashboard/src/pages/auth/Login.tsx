@@ -1,9 +1,8 @@
 import { ILoginRequest } from "@ams/core";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import { TextInput } from "../../components/ui/Input";
 import { useLogin } from "../../hooks/api/auth/useLogin";
-import { Button } from "@mantine/core";
+import { Button, TextInput } from "@mantine/core";
 
 export const Login = () => {
   const { mutate } = useLogin();
@@ -24,6 +23,7 @@ export const Login = () => {
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
         <div className="my-2">
           <TextInput
+            label="Email"
             type="email"
             placeholder="Email"
             {...loginForm.register("email")}
@@ -32,6 +32,7 @@ export const Login = () => {
 
         <div className="my-2">
           <TextInput
+            label="Password"
             type="password"
             placeholder="Password"
             {...loginForm.register("password")}
