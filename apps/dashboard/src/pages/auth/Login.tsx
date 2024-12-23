@@ -1,6 +1,9 @@
 import { ILoginRequest } from "@ams/core";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../../hooks/queries/useLogin";
+import { Link } from "react-router";
+import { Button } from "../../components/ui/Button";
+import { TextInput } from "../../components/ui/Input";
 
 export const Login = () => {
   const { mutate } = useLogin();
@@ -17,20 +20,34 @@ export const Login = () => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1 className="font-bold text-3xl">Login</h1>
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
-        <input
-          className="border-gray-400 focus:border-black border"
-          type="email"
-          {...loginForm.register("email")}
-        />
-        <input
-          type="password"
-          className="border-gray-400 focus:border-black border"
-          {...loginForm.register("password")}
-        />
-        <button type="submit">Login</button>
+        <div className="my-2">
+          <TextInput
+            type="email"
+            placeholder="Email"
+            {...loginForm.register("email")}
+          />
+        </div>
+
+        <div className="my-2">
+          <TextInput
+            type="password"
+            placeholder="Password"
+            {...loginForm.register("password")}
+          />
+        </div>
+        <Button type="submit">Login</Button>
       </form>
+      <span>
+        Don't have account?{" "}
+        <Link
+          className="text-blue-400 hover:text-blue-600 hover:cursor-pointer"
+          to={"/signup"}
+        >
+          Signup
+        </Link>
+      </span>
     </div>
   );
 };

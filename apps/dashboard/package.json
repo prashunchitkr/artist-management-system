@@ -16,7 +16,8 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
     "react-router": "^7.1.0",
-    "react-router-dom": "^7.1.0"
+    "react-router-dom": "^7.1.0",
+    "rm": "^0.1.8"
   },
   "devDependencies": {
     "@ams/core": "workspace:*",
@@ -30,7 +31,9 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.13.0",
     "postcss": "^8.4.49",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.17",
+    "tw-merge": "0.0.1-alpha.3",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.0.3"
