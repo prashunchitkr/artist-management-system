@@ -4,24 +4,42 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useMemo, useState } from "react";
 import { useGetAllUsers } from "../../hooks/api/users/useGetAllUsers";
+import { UserDetailModal } from "../ui/UserDetailModal";
+import { useDisclosure } from "@mantine/hooks";
 
 interface IRowActionsProps {
   user: IUserResponse;
 }
 
-const RowActions = (_props: IRowActionsProps) => {
+const RowActions = (props: IRowActionsProps) => {
+  const [
+    userDetailModalOpened,
+    { open: openUserDetailModal, close: closeUserDetailMOdal },
+  ] = useDisclosure(false);
   return (
-    <Group gap={4} wrap="nowrap">
-      <ActionIcon size={"sm"} variant="subtle" color="green">
-        <IconEye size={16} />
-      </ActionIcon>
-      <ActionIcon size={"sm"} variant="subtle" color="blue">
-        <IconEdit size={16} />
-      </ActionIcon>
-      <ActionIcon size={"sm"} variant="subtle" color="red">
-        <IconTrash size={16} />
-      </ActionIcon>
-    </Group>
+    <>
+      <UserDetailModal
+        user={props.user}
+        opened={userDetailModalOpened}
+        onClose={closeUserDetailMOdal}
+      />
+      <Group gap={4} wrap="nowrap">
+        <ActionIcon
+          size={"sm"}
+          variant="subtle"
+          color="green"
+          onClick={openUserDetailModal}
+        >
+          <IconEye size={16} />
+        </ActionIcon>
+        <ActionIcon size={"sm"} variant="subtle" color="blue">
+          <IconEdit size={16} />
+        </ActionIcon>
+        <ActionIcon size={"sm"} variant="subtle" color="red">
+          <IconTrash size={16} />
+        </ActionIcon>
+      </Group>
+    </>
   );
 };
 
