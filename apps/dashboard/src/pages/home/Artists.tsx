@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { ArtistTable } from "../../components/artist/ArtistTable";
 import { CreateArtistModal } from "../../components/artist/CreateArtistModal";
 import { useExportArtists } from "../../hooks/api/artists/useExportArtists";
+import { downloadFile } from "../../utils/download-file";
+import { ImportArtistModal } from "../../hooks/api/artists/importArtistModal";
 
 export const Artists = () => {
   const [
@@ -11,16 +13,15 @@ export const Artists = () => {
     { open: openCreateArtistModal, close: closeCreteArtistModal },
   ] = useDisclosure(false);
 
+  const [
+    isImportArtistModalOpened,
+    { open: openImportArtistsModal, close: closeCreateUserModal },
+  ] = useDisclosure(false);
+
   const exportArtist = useExportArtists();
 
   useEffect(() => {
-    if (exportArtist.data) {
-      const url = window.URL.createObjectURL(exportArtist.data);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "artists.csv";
-      a.click();
-    }
+    if (exportArtist.data) downloadFile(exportArtist.data);
   }, [exportArtist.data]);
 
   return (
@@ -29,10 +30,16 @@ export const Artists = () => {
         opened={createArtistModalOpened}
         onClose={closeCreteArtistModal}
       />
+      <ImportArtistModal
+        opened={isImportArtistModalOpened}
+        onClose={closeCreateUserModal}
+      />
       <Stack>
         <Group gap={"md"}>
           <Button onClick={openCreateArtistModal}>Create Artist</Button>
-          <Button color="green">Import Artist</Button>
+          <Button color="green" onClick={openImportArtistsModal}>
+            Import Artist
+          </Button>
           <Button
             color="grape"
             onClick={() => exportArtist.refetch()}
