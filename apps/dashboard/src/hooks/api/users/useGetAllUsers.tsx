@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { IGetAllUsersResponse } from "@ams/core";
+import { IGetAllUsersResponse, IUserResponse } from "@ams/core";
 import { API_URL } from "../../../core/utils/consts";
 
 const getUsers = async (
@@ -25,7 +25,16 @@ const getUsers = async (
     throw new Error("An error occurred while trying to get users");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  return {
+    ...data,
+    data: data.data.map((user: IUserResponse) => ({
+      ...user,
+      dob: user.dob ? new Date(user.dob) : null,
+      created_at: new Date(user.created_at),
+    })),
+  };
 };
 
 export const useGetAllUsers = (skip: number, take: number) => {

@@ -31,7 +31,7 @@ export class UserRepository implements IRepository<User> {
 
   // TODO: Implement cursor based pagination for better performance
   async findAll(pagination: IPagination): Promise<IFindAllPaginated<User>> {
-    const query = 'SELECT * FROM users LIMIT $1 OFFSET $2';
+    const query = 'SELECT * FROM users ORDER BY created_at LIMIT $1 OFFSET $2';
     const params = [pagination.take, pagination.skip];
 
     const users = await this.db.query(query, params);
