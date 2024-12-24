@@ -1,14 +1,47 @@
-import { IArtistResponse } from "@ams/core";
+import { ActionIcon, Group } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useState } from "react";
+
+import { IArtistResponse } from "@ams/core";
 import { useGetAllArtists } from "../../hooks/api/artists/useGetAllArtists";
+import { ArtistDetailModal } from "./ArtistDetailModal";
 
 interface IRowActionsProps {
   artist: IArtistResponse;
 }
 
 const RowActions = (props: IRowActionsProps) => {
-  return <div>RowActions</div>;
+  const [
+    artistDetailModalOpened,
+    { open: openArtistDetailModal, close: closeArtistDetailModal },
+  ] = useDisclosure(false);
+  return (
+    <>
+      <ArtistDetailModal
+        artist={props.artist}
+        opened={artistDetailModalOpened}
+        onClose={closeArtistDetailModal}
+      />
+      <Group gap={4} wrap="nowrap">
+        <ActionIcon
+          size="sm"
+          variant="subtle"
+          color="green"
+          onClick={openArtistDetailModal}
+        >
+          <IconEye size={16} />
+        </ActionIcon>
+        <ActionIcon size="sm" variant="subtle" color="blue">
+          <IconEdit size={16} />
+        </ActionIcon>
+        <ActionIcon size="sm" variant="subtle" color="red">
+          <IconTrash size={16} />
+        </ActionIcon>
+      </Group>
+    </>
+  );
 };
 
 const columns: DataTableColumn<IArtistResponse>[] = [
