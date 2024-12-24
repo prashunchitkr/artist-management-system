@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../../../core/utils/consts";
 
 const updateArtist = async (
-  id: string,
+  id: number,
   data: IUpdateArtistRequest,
 ): Promise<IArtistResponse> => {
   const endpoint = `${API_URL}/artists/${id}`;
@@ -29,7 +29,7 @@ export const useUpdateArtist = () => {
 
   return useMutation({
     mutationKey: ["artists"],
-    mutationFn: (data: { id: string; data: IUpdateArtistRequest }) =>
+    mutationFn: (data: { id: number; data: IUpdateArtistRequest }) =>
       updateArtist(data.id, data.data),
     onSuccess: () => {
       queryClient.invalidateQueries({

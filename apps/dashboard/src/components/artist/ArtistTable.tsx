@@ -7,6 +7,7 @@ import { useState } from "react";
 import { IArtistResponse } from "@ams/core";
 import { useGetAllArtists } from "../../hooks/api/artists/useGetAllArtists";
 import { ArtistDetailModal } from "./ArtistDetailModal";
+import { EditArtistModal } from "./EditArtistModal";
 
 interface IRowActionsProps {
   artist: IArtistResponse;
@@ -17,12 +18,23 @@ const RowActions = (props: IRowActionsProps) => {
     artistDetailModalOpened,
     { open: openArtistDetailModal, close: closeArtistDetailModal },
   ] = useDisclosure(false);
+
+  const [
+    editArtistModalOpened,
+    { open: openEditArtistModal, close: closeEditArtistModal },
+  ] = useDisclosure(false);
+
   return (
     <>
       <ArtistDetailModal
         artist={props.artist}
         opened={artistDetailModalOpened}
         onClose={closeArtistDetailModal}
+      />
+      <EditArtistModal
+        artist={props.artist}
+        opened={editArtistModalOpened}
+        onClose={closeEditArtistModal}
       />
       <Group gap={4} wrap="nowrap">
         <ActionIcon
@@ -33,7 +45,12 @@ const RowActions = (props: IRowActionsProps) => {
         >
           <IconEye size={16} />
         </ActionIcon>
-        <ActionIcon size="sm" variant="subtle" color="blue">
+        <ActionIcon
+          size="sm"
+          variant="subtle"
+          color="blue"
+          onClick={openEditArtistModal}
+        >
           <IconEdit size={16} />
         </ActionIcon>
         <ActionIcon size="sm" variant="subtle" color="red">

@@ -1,22 +1,27 @@
-import { Gender, ICreateArtistRequest } from "@ams/core";
+import {
+  Gender,
+  IArtistResponse,
+  ICreateArtistRequest,
+  IUpdateArtistRequest,
+} from "@ams/core";
 import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useCreateArtist } from "../../hooks/api/artists/useCreateArtist";
+import { useUpdateArtist } from "../../hooks/api/artists/useUpdateArtist";
 import { useFindUnassignedArtistUsers } from "../../hooks/api/users/useFindUnassignedArtistUsers";
 
-type CreateArtistForm = ICreateArtistRequest;
-
-interface ICreateArtistModalProps {
+interface IEditArtistModalProps {
   opened: boolean;
   onClose: () => void;
+  artist: IArtistResponse;
 }
 
-export const CreateArtistModal = ({
+export const EditArtistModal = ({
   opened,
   onClose,
-}: ICreateArtistModalProps) => {
-  const createArtist = useCreateArtist();
+  artist,
+}: IEditArtistModalProps) => {
+  const updateArtist = useUpdateArtist();
   const unassignedArtistUsers = useFindUnassignedArtistUsers();
 
   const userOptions =
@@ -40,34 +45,29 @@ export const CreateArtistModal = ({
     },
   ];
 
-  const createArtistForm = useForm<CreateArtistForm>({
-    defaultValues: {
-      dob: null,
-      address: null,
-      first_release_year: 0,
-      no_of_albums_released: 0,
-    },
+  const editArtistForm = useForm<IUpdateArtistRequest>({
+    defaultValues: artist,
   });
 
-  const onSubmit = (data: CreateArtistForm) => {
-    createArtist.mutate(data);
+  const onSubmit = (data: IUpdateArtistRequest) => {
+    updateArtist.mutate({ id: artist.id, data });
   };
 
   useEffect(() => {
-    if (createArtist.isSuccess) {
-      createArtistForm.reset();
+    if (updateArtist.isSuccess) {
+      editArtistForm.reset();
       onClose();
     }
-  }, [createArtist.isSuccess, onClose, createArtistForm]);
+  }, [updateArtist.isSuccess, editArtistForm, onClose]);
 
   return (
-    <Modal opened={opened} onClose={onClose} title="Create Artist">
-      <form onSubmit={createArtistForm.handleSubmit(onSubmit)}>
-        <Stack gap="md" mb={10}>
+    <Modal opened={opened} onClose={onClose} title="Edit Artist">
+      <form onSubmit={editArtistForm.handleSubmit(onSubmit)}>
+        <Stack gap={"md"} mb={10}>
           <TextInput
             withAsterisk
             label="Name"
-            {...createArtistForm.register("name", {
+            {...editArtistForm.register("name", {
               required: true,
               maxLength: 255,
             })}
@@ -78,9 +78,9 @@ export const CreateArtistModal = ({
             label="Gender"
             placeholder="Select a gender"
             data={genderOptions}
-            {...createArtistForm.register("gender", { required: true })}
+            {...editArtistForm.register("gender", { required: true })}
             onChange={(_value, option) => {
-              createArtistForm.setValue("gender", option.value);
+              editArtistForm.setValue("gender", option.value);
             }}
           />
 
@@ -90,30 +90,32 @@ export const CreateArtistModal = ({
             withAsterisk
             limit={10}
             data={userOptions}
-            {...createArtistForm.register("user_id", {
+            {...editArtistForm.register("user_id", {
               required: true,
             })}
             onChange={(_value, option) => {
-              createArtistForm.setValue("user_id", parseInt(option.value));
+              editArtistForm.setValue("user_id", parseInt(option.value));
             }}
           />
 
           <TextInput
             label="Date of Birth"
             type="date"
-            {...createArtistForm.register("dob", { valueAsDate: true })}
+            {...editArtistForm.register("dob", {
+              valueAsDate: true,
+            })}
           />
 
           <TextInput
             label="Address"
             placeholder="Address"
-            {...createArtistForm.register("address")}
+            {...editArtistForm.register("address")}
           />
 
           <TextInput
             label="First Release Year"
             type="number"
-            {...createArtistForm.register("first_release_year", {
+            {...editArtistForm.register("first_release_year", {
               min: 0,
               max: new Date().getFullYear(),
             })}
@@ -122,14 +124,14 @@ export const CreateArtistModal = ({
           <TextInput
             label="No. of Albums Released"
             type="number"
-            {...createArtistForm.register("no_of_albums_released", {
+            {...editArtistForm.register("no_of_albums_released", {
               min: 0,
             })}
           />
         </Stack>
 
         <Group>
-          <Button type="submit" loading={createArtist.isPending}>
+          <Button type="submit" loading={updateArtist.isPending}>
             Create
           </Button>
           <Button color="red" onClick={onClose}>
