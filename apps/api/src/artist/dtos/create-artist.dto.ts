@@ -1,5 +1,5 @@
 import { IsNullable } from '@/core/decorators/is-nullable.decorator';
-import { Gender } from '@/core/enums/db.enums';
+import { Gender } from '@ams/core';
 import { IsDate, IsEnum, IsInt, IsString, MaxLength } from 'class-validator';
 
 export class CreateArtistRequestDto {

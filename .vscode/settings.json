@@ -4,5 +4,14 @@
       "mode": "auto"
     }
   ],
-  "cSpell.words": ["dtos", "Millis", "nestjs"]
+  "cSpell.words": [
+    "datatable",
+    "dtos",
+    "Millis",
+    "nestjs",
+    "tabler",
+    "uidotdev",
+    "usehooks",
+    "VITE"
+  ]
 }

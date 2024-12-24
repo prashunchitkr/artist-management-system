@@ -31,7 +31,7 @@ export class UserRepository implements IRepository<User> {
 
   // TODO: Implement cursor based pagination for better performance
   async findAll(pagination: IPagination): Promise<IFindAllPaginated<User>> {
-    const query = 'SELECT * FROM users LIMIT $1 OFFSET $2';
+    const query = 'SELECT * FROM users ORDER BY created_at LIMIT $1 OFFSET $2';
     const params = [pagination.take, pagination.skip];
 
     const users = await this.db.query(query, params);
@@ -41,6 +41,20 @@ export class UserRepository implements IRepository<User> {
       total: await this.count(),
       count: users.length,
     };
+  }
+
+  async findUnassignedArtistUsers(): Promise<User[]> {
+    const query = `
+      SELECT * FROM users
+      WHERE role = 'artist'
+      AND id NOT IN (
+        SELECT user_id FROM artists
+      )
+    `;
+
+    const results = await this.db.query(query);
+
+    return results.map((user) => plainToClass(User, user));
   }
 
   async create(

@@ -77,6 +77,8 @@ export class ArtistRepository implements IRepository<Artist> {
           *
         FROM
           artists
+        ORDER BY
+          created_at
         LIMIT $1 OFFSET $2
       `;
 

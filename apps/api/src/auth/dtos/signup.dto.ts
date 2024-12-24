@@ -1,5 +1,3 @@
-import { IsNullable } from '@/core/decorators/is-nullable.decorator';
-import { Gender } from '@/core/enums/db.enums';
 import {
   IsDate,
   IsEmail,
@@ -11,7 +9,10 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignupDto {
+import { IsNullable } from '@/core/decorators/is-nullable.decorator';
+import { Gender, ISignupRequest } from '@ams/core';
+
+export class SignupDto implements ISignupRequest {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)

@@ -1,5 +1,5 @@
-import { Genre } from '@/core/enums/db.enums';
 import { IEntity } from '@/infra/interfaces/entity.interface';
+import { Genre } from '@ams/core';
 import { Exclude } from 'class-transformer';
 
 export class Music implements IEntity {

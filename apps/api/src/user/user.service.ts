@@ -46,6 +46,10 @@ export class UserService {
     return this.userRepository.findAll(pagination);
   }
 
+  findUnassignedArtistUsers(): Promise<User[]> {
+    return this.userRepository.findUnassignedArtistUsers();
+  }
+
   async update(
     id: number,
     data: Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>,

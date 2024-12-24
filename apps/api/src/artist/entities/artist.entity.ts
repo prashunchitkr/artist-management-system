@@ -1,4 +1,4 @@
-import { Gender } from '@/core/enums/db.enums';
+import { Gender } from '@ams/core';
 import { Exclude } from 'class-transformer';
 
 export class Artist {
@@ -11,7 +11,6 @@ export class Artist {
   first_release_year: number | null;
   no_of_albums_released: number | null;
 
-  @Exclude()
   created_at: Date;
 
   @Exclude()

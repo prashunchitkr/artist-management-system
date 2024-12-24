@@ -36,7 +36,13 @@ async function bootstrap() {
   addSwagger(app, swaggerEndpoint);
 
   const appConfig = app.get(ConfigService);
-  const { host, port } = appConfig.get<IHostConfig>(CONFIG_KEYS.host);
+  const { host, port, corsEndpoints } = appConfig.get<IHostConfig>(
+    CONFIG_KEYS.host,
+  );
+
+  app.enableCors({
+    origin: corsEndpoints,
+  });
 
   await app.listen(port, host, () => {
     logger.log(`Server is running on http://${host}:${port}`);
