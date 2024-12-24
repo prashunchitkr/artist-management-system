@@ -8,7 +8,10 @@ import {
   Patch,
   Post,
   Query,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -25,6 +28,10 @@ import {
   UpdateArtistResponseDto,
 } from './dtos/update-artist.dto';
 import { Role } from '@ams/core';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @ApiTags('Artists')
 @Controller('artists')
@@ -32,6 +39,23 @@ import { Role } from '@ams/core';
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
+
+  @Get('export-csv')
+  @Roles(Role.SuperAdmin, Role.ArtistManager)
+  async exportArtists(@Res() res: Response) {
+    const filePath = await this.artistService.exportArtists();
+    res.setHeader('Content-Disposition', `attachment; filename=${filePath}`);
+    res.setHeader('Content-Type', 'text/csv');
+    const fileStream = createReadStream(filePath);
+    fileStream.pipe(res);
+  }
+
+  @Post('import-csv')
+  @Roles(Role.SuperAdmin, Role.ArtistManager)
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  async importArtists(@UploadedFile() file: Express.Multer.File) {
+    return this.artistService.importArtists(file.buffer);
+  }
 
   @Post()
   @Roles(Role.SuperAdmin, Role.ArtistManager)
