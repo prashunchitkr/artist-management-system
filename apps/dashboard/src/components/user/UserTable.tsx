@@ -5,8 +5,9 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useMemo, useState } from "react";
 import { useGetAllUsers } from "../../hooks/api/users/useGetAllUsers";
-import { EditUserModal } from "../ui/user/EditUserModal";
-import { UserDetailModal } from "../ui/user/UserDetailModal";
+import { EditUserModal } from "../user/EditUserModal";
+import { UserDetailModal } from "../user/UserDetailModal";
+import { DeleteUserModal } from "./DeleteUserModal";
 
 interface IRowActionsProps {
   user: IUserResponse;
@@ -23,6 +24,11 @@ const RowActions = (props: IRowActionsProps) => {
     { open: openEditUserModal, close: closeEditUserModal },
   ] = useDisclosure(false);
 
+  const [
+    deleteUserModalOpened,
+    { open: openDeleteUserModal, close: closeDeleteUserModal },
+  ] = useDisclosure(false);
+
   return (
     <>
       <UserDetailModal
@@ -34,6 +40,11 @@ const RowActions = (props: IRowActionsProps) => {
         user={props.user}
         opened={editUserModalOpened}
         onClose={closeEditUserModal}
+      />
+      <DeleteUserModal
+        id={props.user.id}
+        opened={deleteUserModalOpened}
+        onClose={closeDeleteUserModal}
       />
       <Group gap={4} wrap="nowrap">
         <ActionIcon
@@ -52,7 +63,12 @@ const RowActions = (props: IRowActionsProps) => {
         >
           <IconEdit size={16} />
         </ActionIcon>
-        <ActionIcon size={"sm"} variant="subtle" color="red">
+        <ActionIcon
+          size={"sm"}
+          variant="subtle"
+          color="red"
+          onClick={openDeleteUserModal}
+        >
           <IconTrash size={16} />
         </ActionIcon>
       </Group>

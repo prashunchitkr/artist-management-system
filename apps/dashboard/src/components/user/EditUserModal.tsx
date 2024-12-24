@@ -1,8 +1,9 @@
-import { Gender, IUpdateUserRequest, IUserResponse, Role } from "@ams/core";
 import { Button, Group, Input, Modal, Stack, TextInput } from "@mantine/core";
-import { useForm } from "react-hook-form";
-import { useUpdateUser } from "../../../hooks/api/users/useUpdateUser";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+import { Gender, IUpdateUserRequest, IUserResponse, Role } from "@ams/core";
+import { useUpdateUser } from "../../hooks/api/users/useUpdateUser";
 
 interface IEditUserModalProps {
   opened: boolean;
