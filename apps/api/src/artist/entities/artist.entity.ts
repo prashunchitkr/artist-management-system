@@ -11,7 +11,6 @@ export class Artist {
   first_release_year: number | null;
   no_of_albums_released: number | null;
 
-  @Exclude()
   created_at: Date;
 
   @Exclude()
