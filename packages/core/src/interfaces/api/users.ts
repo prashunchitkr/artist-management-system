@@ -16,3 +16,8 @@ export interface IUpdateUserRequest
   extends Partial<Omit<IUser, "id" | "created_at" | "updated_at">> {
   password?: string;
 }
+
+export interface IFindUnassignedArtistUsersResponse {
+  id: number;
+  name: string;
+}

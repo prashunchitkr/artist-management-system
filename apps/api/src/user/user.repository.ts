@@ -43,6 +43,20 @@ export class UserRepository implements IRepository<User> {
     };
   }
 
+  async findUnassignedArtistUsers(): Promise<User[]> {
+    const query = `
+      SELECT * FROM users
+      WHERE role = 'artist'
+      AND id NOT IN (
+        SELECT user_id FROM artists
+      )
+    `;
+
+    const results = await this.db.query(query);
+
+    return results.map((user) => plainToClass(User, user));
+  }
+
   async create(
     entity: Omit<User, 'id' | 'created_at' | 'updated_at'>,
   ): Promise<User> {

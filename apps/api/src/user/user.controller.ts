@@ -19,7 +19,10 @@ import {
   CreateUserRequestDto,
   CreateUserResponseDto,
 } from './dtos/create-user.dto';
-import { FindAllUserResponseDto } from './dtos/find-all-user-response.dto';
+import {
+  FindAllUserResponseDto,
+  FindUnassignedArtistUsersDto,
+} from './dtos/find-all-user-response.dto';
 import { FindAllUserQueryDto } from './dtos/find-all-user.dto';
 import { UpdateUserRequestDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
@@ -53,6 +56,17 @@ export class UserController {
       total: users.total,
       count: users.count,
     };
+  }
+
+  @Get('unassigned-artists')
+  @Roles(Role.SuperAdmin, Role.ArtistManager)
+  async findUnassignedArtistUsers(): Promise<FindUnassignedArtistUsersDto[]> {
+    const users = await this.userService.findUnassignedArtistUsers();
+
+    return users.map((user) => ({
+      id: user.id,
+      name: `${user.first_name} ${user.last_name}`,
+    }));
   }
 
   @Post()
