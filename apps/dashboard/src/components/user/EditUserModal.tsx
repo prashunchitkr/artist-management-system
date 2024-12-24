@@ -18,16 +18,7 @@ export const EditUserModal = ({
 }: IEditUserModalProps) => {
   const updateUser = useUpdateUser();
   const editUserForm = useForm<IUpdateUserRequest>({
-    defaultValues: {
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      gender: user.gender,
-      role: user.role,
-      phone: user.phone,
-      address: user.address,
-      dob: user.dob,
-    },
+    defaultValues: user,
   });
 
   const onSubmit = (data: IUpdateUserRequest) => {

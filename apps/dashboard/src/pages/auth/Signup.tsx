@@ -20,7 +20,7 @@ export const Signup = () => {
 
   const onSubmit = (data: SignupForm) => {
     if (data.password !== data.confirm_password) {
-      signupForm.setError("confirm_password", {
+      return signupForm.setError("confirm_password", {
         message: "Password does not match",
       });
     }
