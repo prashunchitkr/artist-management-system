@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../../../core/utils/consts";
 
-const deleteArtist = async (id: string) => {
+const deleteArtist = async (id: number) => {
   const endpoint = `${API_URL}/artists/${id}`;
 
   const response = await fetch(endpoint, {
