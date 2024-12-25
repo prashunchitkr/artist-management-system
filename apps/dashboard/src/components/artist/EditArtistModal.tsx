@@ -3,7 +3,6 @@ import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateArtist } from "../../hooks/api/artists/useUpdateArtist";
-import { useFindUnassignedArtistUsers } from "../../hooks/api/users/useFindUnassignedArtistUsers";
 
 interface IEditArtistModalProps {
   opened: boolean;
@@ -17,13 +16,6 @@ export const EditArtistModal = ({
   artist,
 }: IEditArtistModalProps) => {
   const updateArtist = useUpdateArtist();
-  const unassignedArtistUsers = useFindUnassignedArtistUsers();
-
-  const userOptions =
-    unassignedArtistUsers.data?.map((user) => ({
-      value: String(user.id),
-      label: user.name,
-    })) || [];
 
   const genderOptions = [
     {
@@ -55,41 +47,29 @@ export const EditArtistModal = ({
     }
   }, [updateArtist.isSuccess, editArtistForm, onClose]);
 
+  useEffect(() => {
+    editArtistForm.reset(artist);
+  }, [artist, editArtistForm]);
+
   return (
     <Modal opened={opened} onClose={onClose} title="Edit Artist">
       <form onSubmit={editArtistForm.handleSubmit(onSubmit)}>
         <Stack gap={"md"} mb={10}>
           <TextInput
-            withAsterisk
             label="Name"
             {...editArtistForm.register("name", {
-              required: true,
               maxLength: 255,
             })}
           />
 
           <Select
-            withAsterisk
             label="Gender"
             placeholder="Select a gender"
+            defaultValue={artist.gender}
             data={genderOptions}
-            {...editArtistForm.register("gender", { required: true })}
+            {...editArtistForm.register("gender")}
             onChange={(_value, option) => {
               editArtistForm.setValue("gender", option.value);
-            }}
-          />
-
-          <Select
-            label="User"
-            placeholder="Select a user"
-            withAsterisk
-            limit={10}
-            data={userOptions}
-            {...editArtistForm.register("user_id", {
-              required: true,
-            })}
-            onChange={(_value, option) => {
-              editArtistForm.setValue("user_id", parseInt(option.value));
             }}
           />
 
@@ -127,7 +107,7 @@ export const EditArtistModal = ({
 
         <Group>
           <Button type="submit" loading={updateArtist.isPending}>
-            Create
+            Submit
           </Button>
           <Button color="red" onClick={onClose}>
             Cancel

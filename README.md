@@ -29,8 +29,11 @@ The Artist Management System is a monorepo project designed to manage artists, t
 ### CRUD Operations
 
 1. Users
+   - Accessible only to users with super_admin role
 2. Artists
-3. Songs (Work In Progress)
+   - Accessible to users with super_admin and artist_manager roles
+3. Songs
+   - Accessible read to super_admin and artist_manager, and CRUD to artist users
 
 ### Role-Based Access Control (RBAC)
 

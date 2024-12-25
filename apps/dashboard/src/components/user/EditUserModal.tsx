@@ -35,6 +35,10 @@ export const EditUserModal = ({
     }
   }, [updateUser.isSuccess, onClose]);
 
+  useEffect(() => {
+    editUserForm.reset(user);
+  }, [user, editUserForm]);
+
   return (
     <Modal opened={opened} onClose={onClose} title="Edit User">
       <form onSubmit={editUserForm.handleSubmit(onSubmit)}>
@@ -88,6 +92,7 @@ export const EditUserModal = ({
           <Input.Wrapper label="Gender">
             <Input
               component="select"
+              defaultValue={user.gender}
               pointer
               {...editUserForm.register("gender")}
             >
@@ -100,6 +105,7 @@ export const EditUserModal = ({
           <Input.Wrapper label="Role">
             <Input
               component="select"
+              defaultValue={user.role}
               pointer
               {...editUserForm.register("role")}
             >

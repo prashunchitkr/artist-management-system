@@ -26,10 +26,13 @@ export const EditMusicModal = ({
 
   useEffect(() => {
     if (updateMusic.isSuccess) {
-      updateMusicForm.reset();
       onClose();
     }
-  }, [updateMusic.isSuccess, updateMusicForm, onClose]);
+  }, [updateMusic.isSuccess, onClose]);
+
+  useEffect(() => {
+    updateMusicForm.reset(music);
+  }, [music, updateMusicForm]);
 
   return (
     <Modal opened={opened} onClose={onClose} title="Edit Music">
@@ -52,6 +55,7 @@ export const EditMusicModal = ({
             withAsterisk
             label="Genre"
             placeholder="Select genre"
+            defaultValue={music.genre}
             data={[
               { value: Genre.Rock, label: "Rock" },
               { value: Genre.Classic, label: "Classic" },

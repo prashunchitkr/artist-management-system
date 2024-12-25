@@ -1,8 +1,8 @@
 import { ILoginRequest } from "@ams/core";
+import { Button, Container, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { useLogin } from "../../hooks/api/auth/useLogin";
-import { Button, TextInput } from "@mantine/core";
 
 export const Login = () => {
   const { mutate } = useLogin();
@@ -18,27 +18,25 @@ export const Login = () => {
   };
 
   return (
-    <div>
-      <h1 className="font-bold text-3xl">Login</h1>
+    <Container size="sm">
+      <Title>Login</Title>
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
-        <div className="my-2">
+        <Stack gap={"md"}>
           <TextInput
             label="Email"
             type="email"
             placeholder="Email"
             {...loginForm.register("email")}
           />
-        </div>
 
-        <div className="my-2">
           <TextInput
             label="Password"
             type="password"
             placeholder="Password"
             {...loginForm.register("password")}
           />
-        </div>
-        <Button type="submit">Login</Button>
+          <Button type="submit">Login</Button>
+        </Stack>
       </form>
       <span>
         Don't have account?{" "}
@@ -49,6 +47,6 @@ export const Login = () => {
           Signup
         </Link>
       </span>
-    </div>
+    </Container>
   );
 };
