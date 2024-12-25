@@ -1,8 +1,18 @@
+import { IMusicResponse } from "@ams/core";
+import { Button, Group } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useGetArtistMusic } from "../../hooks/api/music/useGetArtistMusic";
-import { IMusicResponse } from "@ams/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+
+const musicTableActions = (music: IMusicResponse) => {
+  return (
+    <Group gap={4}>
+      <Button>Edit</Button>
+      <Button>Delete</Button>
+    </Group>
+  );
+};
 
 const columns: DataTableColumn<IMusicResponse>[] = [
   {
@@ -26,6 +36,11 @@ const columns: DataTableColumn<IMusicResponse>[] = [
     title: "Created At",
     accessor: "created_at",
     render: (value) => value.created_at.toLocaleString(),
+  },
+  {
+    title: "Actions",
+    accessor: "actions",
+    render: musicTableActions,
   },
 ];
 
