@@ -7,7 +7,8 @@ The Artist Management System is a monorepo project designed to manage artists, t
 ## Project Structure
 
 - **API**: Located in [apps/api](apps/api), this is the backend service that handles all the business logic and data management.
-- **Frontend**: Located in [apps/frontend](apps/frontend), this is the frontend application that interacts with the API.
+- **Frontend**: Located in [apps/dashboard](apps/dashboard), this is the frontend application that interacts with the API.
+- **Core**: Located in [packages/core](packages/core), contains shared interfaces between apps. This needs to be build first in order to run/build other applications.
 
 ## Setup Environment
 

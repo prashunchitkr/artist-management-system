@@ -7,8 +7,13 @@ import { useGetArtistMusic } from "../../hooks/api/music/useGetArtistMusic";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { DeleteMusicModal } from "./DeleteMusicModal";
+import { EditMusicModal } from "./EditMusicModal";
 
 const MusicTableActions = (music: IMusicResponse) => {
+  const [
+    upDateMusicModalOpened,
+    { open: openUpdateMusicModal, close: closeUpdateMusicModal },
+  ] = useDisclosure(false);
   const [
     deleteMusicModalOpened,
     { open: openDeleteMusicModal, close: closeDeleteMusicModal },
@@ -16,6 +21,11 @@ const MusicTableActions = (music: IMusicResponse) => {
 
   return (
     <>
+      <EditMusicModal
+        music={music}
+        opened={upDateMusicModalOpened}
+        onClose={closeUpdateMusicModal}
+      />
       <DeleteMusicModal
         id={music.id}
         artistId={music.artist_id}
@@ -23,7 +33,12 @@ const MusicTableActions = (music: IMusicResponse) => {
         onClose={closeDeleteMusicModal}
       />
       <Group gap={4}>
-        <ActionIcon variant="subtle" color="blue" size={"sm"}>
+        <ActionIcon
+          variant="subtle"
+          color="blue"
+          size={"sm"}
+          onClick={openUpdateMusicModal}
+        >
           <IconEdit size={16} />
         </ActionIcon>
         <ActionIcon variant="subtle" color="red" onClick={openDeleteMusicModal}>
