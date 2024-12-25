@@ -1,16 +1,36 @@
 import { IMusicResponse } from "@ams/core";
-import { Button, Group } from "@mantine/core";
+import { ActionIcon, Group } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useGetArtistMusic } from "../../hooks/api/music/useGetArtistMusic";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { DeleteMusicModal } from "./DeleteMusicModal";
 
-const musicTableActions = (music: IMusicResponse) => {
+const MusicTableActions = (music: IMusicResponse) => {
+  const [
+    deleteMusicModalOpened,
+    { open: openDeleteMusicModal, close: closeDeleteMusicModal },
+  ] = useDisclosure(false);
+
   return (
-    <Group gap={4}>
-      <Button>Edit</Button>
-      <Button>Delete</Button>
-    </Group>
+    <>
+      <DeleteMusicModal
+        id={music.id}
+        artistId={music.artist_id}
+        opened={deleteMusicModalOpened}
+        onClose={closeDeleteMusicModal}
+      />
+      <Group gap={4}>
+        <ActionIcon variant="subtle" color="blue" size={"sm"}>
+          <IconEdit size={16} />
+        </ActionIcon>
+        <ActionIcon variant="subtle" color="red" onClick={openDeleteMusicModal}>
+          <IconTrash size={16} />
+        </ActionIcon>
+      </Group>
+    </>
   );
 };
 
@@ -40,7 +60,7 @@ const columns: DataTableColumn<IMusicResponse>[] = [
   {
     title: "Actions",
     accessor: "actions",
-    render: musicTableActions,
+    render: MusicTableActions,
   },
 ];
 
