@@ -1,11 +1,11 @@
 import { Button, Group, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
-import { ArtistTable } from "../../components/artist/ArtistTable";
-import { CreateArtistModal } from "../../components/artist/CreateArtistModal";
-import { useExportArtists } from "../../hooks/api/artists/useExportArtists";
-import { downloadFile } from "../../utils/download-file";
-import { ImportArtistModal } from "../../hooks/api/artists/importArtistModal";
+import { ArtistTable } from "../../../components/artist/ArtistTable";
+import { CreateArtistModal } from "../../../components/artist/CreateArtistModal";
+import { ImportArtistModal } from "../../../hooks/api/artists/importArtistModal";
+import { useExportArtists } from "../../../hooks/api/artists/useExportArtists";
+import { downloadFile } from "../../../utils/download-file";
 
 export const Artists = () => {
   const [

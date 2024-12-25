@@ -3,12 +3,12 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import { Login } from "../../pages/auth/Login";
 import { Signup } from "../../pages/auth/Signup";
 import { Home } from "../../pages/Home";
-import { Artists } from "../../pages/home/Artists";
+import { ArtistMusic } from "../../pages/home/artist/ArtistMusic";
+import { Artists } from "../../pages/home/artist/Artists";
 import { Music } from "../../pages/home/Music";
 import { Users } from "../../pages/home/Users";
 import { NotFound } from "../../pages/status/NotFound";
 import { AuthGuard } from "../utils/AuthGuard";
-import { ArtistMusic } from "../../pages/home/ArtistMusic";
 
 interface IAppRoutesProps {
   role?: Role;
@@ -44,7 +44,7 @@ const ArtistRoutes = () => {
         }
       >
         <Route index element={<Music />} />
-        <Route path="/artists" element={<Music />} />
+        <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />
     </Routes>

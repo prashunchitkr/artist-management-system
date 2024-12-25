@@ -27,17 +27,6 @@ export interface IAuthResponse {
   expires_in: number;
 }
 
-type SuperAdminPayload = {
-  role: Role.SuperAdmin;
+export type IPayload = {
+  artist_id: number | null;
 } & Omit<IUser, "password" | "created_at" | "updated_at">;
-
-type ArtistManagerPayload = {
-  role: Role.ArtistManager;
-} & Omit<IUser, "password" | "created_at" | "updated_at">;
-
-type ArtistPayload = {
-  role: Role.Artist;
-  artist_id: number;
-} & Omit<IUser, "password" | "created_at" | "updated_at">;
-
-export type IPayload = SuperAdminPayload | ArtistManagerPayload | ArtistPayload;

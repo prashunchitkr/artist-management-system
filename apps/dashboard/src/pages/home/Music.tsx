@@ -1,7 +1,11 @@
+import { Button, Stack } from "@mantine/core";
+import { MusicTable } from "../../components/music/MusicTable";
+
 export const Music = () => {
   return (
-    <div>
-      <h1>Music</h1>
-    </div>
+    <Stack>
+      <Button>Create Music</Button>
+      <MusicTable />
+    </Stack>
   );
 };

@@ -3,7 +3,7 @@ import { Title } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGetArtistMusic } from "../../hooks/api/music/useGetArtistMusic";
+import { useGetArtistMusic } from "../../../hooks/api/music/useGetArtistMusic";
 
 const columns: DataTableColumn<IMusicResponse>[] = [
   {
@@ -13,7 +13,7 @@ const columns: DataTableColumn<IMusicResponse>[] = [
   },
   {
     title: "Name",
-    accessor: "name",
+    accessor: "title",
   },
   {
     title: "Genre",
@@ -57,6 +57,7 @@ export const ArtistMusic = () => {
       <Title order={3} style={{ marginBottom: 20 }}>
         Artist Music
       </Title>
+
       {artistMusic.data && (
         <DataTable
           title="Artist Music"

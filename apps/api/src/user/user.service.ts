@@ -91,7 +91,9 @@ export class UserService {
     return true;
   }
 
-  async findUserFromEmail(email: string): Promise<User | null> {
+  async findUserFromEmail(
+    email: string,
+  ): Promise<(User & { artist_id: number }) | null> {
     return this.userRepository.findUserFromEmail(email);
   }
 
