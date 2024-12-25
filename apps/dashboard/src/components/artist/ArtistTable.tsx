@@ -9,6 +9,7 @@ import { useGetAllArtists } from "../../hooks/api/artists/useGetAllArtists";
 import { ArtistDetailModal } from "./ArtistDetailModal";
 import { EditArtistModal } from "./EditArtistModal";
 import { DeleteArtistModal } from "./DeleteArtistModal";
+import { useNavigate } from "react-router";
 
 interface IRowActionsProps {
   artist: IArtistResponse;
@@ -108,6 +109,8 @@ export const ArtistTable = () => {
   const [perPage, setPerPage] = useState(10);
   const skip = (page - 1) * perPage;
 
+  const navigate = useNavigate();
+
   const artists = useGetAllArtists(skip, perPage);
 
   if (artists.isError) {
@@ -129,6 +132,10 @@ export const ArtistTable = () => {
         onPageChange={setPage}
         recordsPerPageOptions={[10, 20, 50, 100]}
         onRecordsPerPageChange={setPerPage}
+        onCellClick={({ record, column }) => {
+          if (column.accessor === "actions") return;
+          navigate(`/artists/${record.id}`);
+        }}
       />
     )
   );

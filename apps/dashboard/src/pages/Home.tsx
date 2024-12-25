@@ -36,9 +36,9 @@ export const Home = () => {
             <Text size="lg">Artists</Text>
           </Link>
         </RenderForRole>
-        <RenderForRole allowedRoles={[Role.SuperAdmin, Role.Artist]}>
+        <RenderForRole allowedRoles={[Role.Artist]}>
           <Link to={"/music"}>
-            <Text size="lg">Albums</Text>
+            <Text size="lg">Music</Text>
           </Link>
         </RenderForRole>
       </AppShell.Navbar>

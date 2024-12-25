@@ -13,12 +13,12 @@ export const RenderForRole = ({
   const user = useAuth();
 
   if (!user) {
-    return null;
+    return <></>;
   }
 
   if (allowedRoles.includes(user.role)) {
     return <>{children}</>;
   }
 
-  return null;
+  return <></>;
 };

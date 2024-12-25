@@ -1,13 +1,14 @@
 import { Role } from "@ams/core";
+import { Outlet, Route, Routes } from "react-router-dom";
 import { Login } from "../../pages/auth/Login";
 import { Signup } from "../../pages/auth/Signup";
-import { Artists } from "../../pages/home/Artists";
+import { Home } from "../../pages/Home";
+import { ArtistMusic } from "../../pages/home/artist/ArtistMusic";
+import { Artists } from "../../pages/home/artist/Artists";
 import { Music } from "../../pages/home/Music";
 import { Users } from "../../pages/home/Users";
-import { Route, Routes } from "react-router-dom";
-import { AuthGuard } from "../utils/AuthGuard";
-import { Home } from "../../pages/Home";
 import { NotFound } from "../../pages/status/NotFound";
+import { AuthGuard } from "../utils/AuthGuard";
 
 interface IAppRoutesProps {
   role?: Role;
@@ -43,7 +44,7 @@ const ArtistRoutes = () => {
         }
       >
         <Route index element={<Music />} />
-        <Route path="/artists" element={<Music />} />
+        <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />
     </Routes>
@@ -62,7 +63,10 @@ const ArtistManagerRoutes = () => {
         }
       >
         <Route index element={<Artists />} />
-        <Route index path="/artists" element={<Artists />} />
+        <Route path="/artists" element={<Outlet />}>
+          <Route index element={<Artists />} />
+          <Route path=":id" element={<ArtistMusic />} />
+        </Route>
         <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />
@@ -83,7 +87,10 @@ const SuperAdminRoutes = () => {
       >
         <Route index element={<Users />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/artists" element={<Artists />} />
+        <Route path="/artists" element={<Outlet />}>
+          <Route index element={<Artists />} />
+          <Route path=":id" element={<ArtistMusic />} />
+        </Route>
         <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />

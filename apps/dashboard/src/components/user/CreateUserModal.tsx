@@ -38,9 +38,10 @@ export const CreateUserModal = ({ opened, onClose }: ICreateUserModalProps) => {
 
   useEffect(() => {
     if (createUser.isSuccess) {
+      createUser.reset();
       onClose();
     }
-  }, [createUser.isSuccess, onClose]);
+  }, [createUser.isSuccess, onClose, createUser]);
 
   return (
     <Modal opened={opened} onClose={onClose} title="Create User">

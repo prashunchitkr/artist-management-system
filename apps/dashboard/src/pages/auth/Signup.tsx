@@ -89,6 +89,7 @@ export const Signup = () => {
         />
 
         <TextInput
+          label="Date of Birth"
           placeholder="Date of Birth"
           type="date"
           {...signupForm.register("dob", {

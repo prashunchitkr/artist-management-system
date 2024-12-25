@@ -1,4 +1,5 @@
-import { Gender } from "src/enums";
+import { Gender, Role } from "src/enums";
+import { IUser } from "../entities";
 
 export interface ILoginRequest {
   email: string;
@@ -25,3 +26,7 @@ export interface IAuthResponse {
   token: string;
   expires_in: number;
 }
+
+export type IPayload = {
+  artist_id: number | null;
+} & Omit<IUser, "password" | "created_at" | "updated_at">;

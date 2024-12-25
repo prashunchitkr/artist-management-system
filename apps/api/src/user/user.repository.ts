@@ -10,6 +10,7 @@ import { plainToClass } from 'class-transformer';
 import { User } from './entities/user.entity';
 import { CannotInsertUserException } from './exceptions/cannot-insert-user.exception';
 import { CannotUpdateUserException } from './exceptions/cannot-update-user.exception';
+import { IPayload } from '@ams/core';
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
@@ -133,12 +134,32 @@ export class UserRepository implements IRepository<User> {
     }
   }
 
-  async findUserFromEmail(email: string): Promise<User | null> {
-    const query = 'SELECT * FROM users WHERE email = $1';
+  async findUserFromEmail(
+    email: string,
+  ): Promise<(User & { artist_id: number }) | null> {
+    const query = `
+      SELECT
+        u.id,
+        u.first_name,
+        u.last_name,
+        u.email,
+        u.gender,
+        u.phone,
+        u.dob,
+        u.address,
+        u.role,
+        u.password,
+        u.created_at,
+        u.updated_at,
+        a.id AS artist_id
+      FROM
+        users u LEFT JOIN artists a ON u.id = a.user_id
+      WHERE email = $1
+    `;
     const params = [email];
 
-    const user = await this.db.query(query, params);
+    const user = await this.db.query<User & IPayload>(query, params);
 
-    return user.length > 0 ? plainToClass(User, user[0]) : null;
+    return user.length > 0 ? user[0] : null;
   }
 }

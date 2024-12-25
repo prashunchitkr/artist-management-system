@@ -9,4 +9,4 @@ export interface ICreateArtistRequest
 export interface IGetAllArtistsResponse
   extends IPaginatedResponse<IArtistResponse> {}
 
-export interface IUpdateArtistRequest extends Partial<ICreateArtistRequest> {}
+export interface IUpdateArtistRequest extends ICreateArtistRequest {}
