@@ -1,13 +1,14 @@
 import { Role } from "@ams/core";
+import { Outlet, Route, Routes } from "react-router-dom";
 import { Login } from "../../pages/auth/Login";
 import { Signup } from "../../pages/auth/Signup";
+import { Home } from "../../pages/Home";
 import { Artists } from "../../pages/home/Artists";
 import { Music } from "../../pages/home/Music";
 import { Users } from "../../pages/home/Users";
-import { Route, Routes } from "react-router-dom";
-import { AuthGuard } from "../utils/AuthGuard";
-import { Home } from "../../pages/Home";
 import { NotFound } from "../../pages/status/NotFound";
+import { AuthGuard } from "../utils/AuthGuard";
+import { ArtistMusic } from "../../pages/home/ArtistMusic";
 
 interface IAppRoutesProps {
   role?: Role;
@@ -62,7 +63,10 @@ const ArtistManagerRoutes = () => {
         }
       >
         <Route index element={<Artists />} />
-        <Route index path="/artists" element={<Artists />} />
+        <Route path="/artists" element={<Outlet />}>
+          <Route index element={<Artists />} />
+          <Route path=":id" element={<ArtistMusic />} />
+        </Route>
         <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />
@@ -83,7 +87,10 @@ const SuperAdminRoutes = () => {
       >
         <Route index element={<Users />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/artists" element={<Artists />} />
+        <Route path="/artists" element={<Outlet />}>
+          <Route index element={<Artists />} />
+          <Route path=":id" element={<ArtistMusic />} />
+        </Route>
         <Route path="/music" element={<Music />} />
       </Route>
       <Route path="*" element={<NotFound homeLink="/" />} />

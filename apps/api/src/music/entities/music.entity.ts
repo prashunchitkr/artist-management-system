@@ -1,8 +1,7 @@
-import { IEntity } from '@/infra/interfaces/entity.interface';
-import { Genre } from '@ams/core';
+import { Genre, IMusic } from '@ams/core';
 import { Exclude } from 'class-transformer';
 
-export class Music implements IEntity {
+export class Music implements IMusic {
   id: number;
   artist_id: number;
   title: string;

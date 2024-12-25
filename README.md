@@ -39,6 +39,7 @@ Roles: super_admin, artist_manager, artist
 
 The application can be run independently within the app directory or from the monorepo project root.
 
+- Build the core package using the command `pnpm build --filter=@ams/core`
 - If you are running from the application root, use the command `pnpm dev`.
 - If you are running from the monorepo root for development purposes, run the command `pnpm dev`.
 - The app should be running on your configured port from .env, and a Swagger instance should also be running on the /swagger endpoint for the API.

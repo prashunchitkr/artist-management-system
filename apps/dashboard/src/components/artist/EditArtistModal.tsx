@@ -1,9 +1,4 @@
-import {
-  Gender,
-  IArtistResponse,
-  ICreateArtistRequest,
-  IUpdateArtistRequest,
-} from "@ams/core";
+import { Gender, IArtistResponse, IUpdateArtistRequest } from "@ams/core";
 import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
